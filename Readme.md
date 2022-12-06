@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Vlad Ivanishin](https://up.htmlacademy.ru/ecmascript/19/user/792583).
-* Наставник: `Неизвестно`.
+* Наставник: [Семён Якушев](https://htmlacademy.ru/profile/id1118791).
 
 ---
 
