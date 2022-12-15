@@ -1,13 +1,12 @@
 import { createElement } from '../render.js';
 
-function createTripListEmptyTemplate() {
-  return `<p class="trip-events__msg">Click New Event to create your first point
-  </p>`;
-}
+const createLoadingTemplate = () =>
+  ('<p class="trip-events__msg">Loading...</p>');
 
-export default class TripListEmptyTemplate {
+
+export default class LoadingView {
   getTemplate() {
-    return createTripListEmptyTemplate();
+    return createLoadingTemplate();
   }
 
   getElement() {
