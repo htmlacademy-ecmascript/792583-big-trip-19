@@ -18,6 +18,23 @@ export default class TripPresenter {
 
   #renderPoint(point) {
     const pointComponent = new PointView({ point });
+    const pointEditComponent = new EditPointView({ point });
+
+    const replaceCardToForm = () => {
+      this.#tripListComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
+    };
+
+    const replaceFormToCard = () => {
+      this.#tripListComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
+    };
+
+    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceCardToForm();
+    });
+
+    pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceFormToCard();
+    });
 
     render(pointComponent, this.#tripListComponent.element);
   }
@@ -28,7 +45,7 @@ export default class TripPresenter {
   }
 
   init() {
-    this.#listPoints = [...this.#pointsModel.points()];
+    this.#listPoints = [...this.#pointsModel.points];
     render(new ListSortView(), mainEventsElement);
     render(this.#tripListComponent, mainEventsElement);
     render(new NewPointView(), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
