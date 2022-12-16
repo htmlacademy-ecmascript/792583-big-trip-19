@@ -9,21 +9,26 @@ const mainEventsElement = document.querySelector('.trip-events');
 
 
 export default class TripPresenter {
-  tripListComponent = new TripListView();
+  #pointsModel = null;
+  #tripContainer = null;
+
+  #tripListComponent = new TripListView();
+
+  #listPoints = [];
 
   constructor({ tripContainer, pointsModel }) {
-    this.tripContainer = tripContainer;
-    this.pointsModel = pointsModel;
+    this.#tripContainer = tripContainer;
+    this.#pointsModel = pointsModel;
   }
 
   init() {
-    this.listPoints = [...this.pointsModel.getPoints()];
+    this.#listPoints = [...this.#pointsModel.points()];
     render(new ListSortView(), mainEventsElement);
-    render(this.tripListComponent, mainEventsElement);
-    render(new NewPointView(), this.tripListComponent.getElement(), RenderPosition.AFTERBEGIN);
-    for (let i = 1; i < this.listPoints.length; i++) {
-      render(new PointView({ point: this.listPoints[i] }), this.tripListComponent.getElement());
+    render(this.#tripListComponent, mainEventsElement);
+    render(new NewPointView(), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
+    for (let i = 1; i < this.#listPoints.length; i++) {
+      render(new PointView({ point: this.#listPoints[i] }), this.#tripListComponent.element);
     }
-    render(new EditPointView(this.listPoints[0]), this.tripListComponent.getElement(), RenderPosition.AFTERBEGIN);
+    render(new EditPointView(this.#listPoints[0]), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
   }
 }

@@ -1,8 +1,19 @@
 import { createElement } from '../render.js';
 import { destinations, offersByTypes } from '../mock/mock.js';
 import dayjs from 'dayjs';
+import { TYPE } from '../const.js';
 
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
+const BLANK_POINT = {
+  id: 1,
+  type: TYPE[0],
+  offers: [],
+  destination: 1,
+  basePrice: 300,
+  isFavorite: true,
+  dateFrom: '2019-07-10T22:55:56.845Z',
+  dateTo: '2019-07-11T11:22:13.375Z',
+};
 
 const createEditPointTemplate = (point) => {
   const { type, offers, destination, basePrice, dateFrom, dateTo } = point;
@@ -93,23 +104,26 @@ const createEditPointTemplate = (point) => {
 };
 
 export default class EditPointView {
-  constructor(point) {
-    this.point = point;
+  #point = null;
+  #element = null;
+
+  constructor({ point = BLANK_POINT }) {
+    this.#point = point;
   }
 
-  getTemplate() {
-    return createEditPointTemplate(this.point);
+  get template() {
+    return createEditPointTemplate(this.#point);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
