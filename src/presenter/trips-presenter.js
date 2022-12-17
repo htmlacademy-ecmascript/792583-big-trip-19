@@ -1,9 +1,8 @@
 import ListSortView from '../view/list-sort-view.js';
 import EditPointView from '../view/edit-point-view.js';
-import NewPointView from '../view/add-new-point-view.js';
 import PointView from '../view/point-view.js';
 import TripListView from '../view/trip-list-view.js';
-import { render, RenderPosition } from '../render.js';
+import { render } from '../render.js';
 
 const mainEventsElement = document.querySelector('.trip-events');
 
