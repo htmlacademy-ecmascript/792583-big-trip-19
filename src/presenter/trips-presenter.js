@@ -46,6 +46,12 @@ export default class TripPresenter {
       document.removeEventListener('keydown', escKeyDownHandler);
     });
 
+    pointEditComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      // replaceFormToCard();
+      document.removeEventListener('keydown', escKeyDownHandler);
+    });
+
     render(pointComponent, this.#tripListComponent.element);
   }
 
@@ -58,10 +64,10 @@ export default class TripPresenter {
     this.#listPoints = [...this.#pointsModel.points];
     render(new ListSortView(), mainEventsElement);
     render(this.#tripListComponent, mainEventsElement);
-    render(new NewPointView(), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
+    // render(new NewPointView(), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
     for (let i = 0; i < this.#listPoints.length; i++) {
       this.#renderPoint(this.#listPoints[i]);
     }
-    render(new EditPointView(this.#listPoints[0]), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
+    // render(new EditPointView(this.#listPoints[0]), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
   }
 }
