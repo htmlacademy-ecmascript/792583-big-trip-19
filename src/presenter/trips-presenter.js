@@ -28,12 +28,22 @@ export default class TripPresenter {
       this.#tripListComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
     };
 
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+
     pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceCardToForm();
+      document.addEventListener('keydown', escKeyDownHandler);
     });
 
     pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceFormToCard();
+      document.removeEventListener('keydown', escKeyDownHandler);
     });
 
     render(pointComponent, this.#tripListComponent.element);
