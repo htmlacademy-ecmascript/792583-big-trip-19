@@ -7,7 +7,6 @@ import ListEmptyView from '../view/list-empty-view.js';
 
 const mainEventsElement = document.querySelector('.trip-events');
 
-
 export default class TripPresenter {
   #pointsModel = null;
   #tripContainer = null;
