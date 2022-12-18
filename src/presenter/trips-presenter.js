@@ -3,9 +3,9 @@ import EditPointView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
 import TripListView from '../view/trip-list-view.js';
 import { render } from '../render.js';
+import ListEmptyView from '../view/list-empty-view.js';
 
 const mainEventsElement = document.querySelector('.trip-events');
-
 
 export default class TripPresenter {
   #pointsModel = null;
@@ -61,11 +61,15 @@ export default class TripPresenter {
 
   init() {
     this.#listPoints = [...this.#pointsModel.points];
-    render(new ListSortView(), mainEventsElement);
-    render(this.#tripListComponent, mainEventsElement);
-    // render(new NewPointView(), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
-    for (let i = 0; i < this.#listPoints.length; i++) {
-      this.#renderPoint(this.#listPoints[i]);
+    if (this.#listPoints.length === 0) {
+      render(new ListEmptyView(), mainEventsElement);
+    } else {
+      render(new ListSortView(), mainEventsElement);
+      render(this.#tripListComponent, mainEventsElement);
+      // render(new NewPointView(), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
+      for (let i = 0; i < this.#listPoints.length; i++) {
+        this.#renderPoint(this.#listPoints[i]);
+      }
     }
     // render(new EditPointView(this.#listPoints[0]), this.#tripListComponent.element, RenderPosition.AFTERBEGIN);
   }
