@@ -1,7 +1,6 @@
-import { getRandomArrayElement } from '../util.js';
+import { getRandomArrayElement } from '../utils/common.js';
 
-const randomPic = () => Math.random();
-
+const pictures = Array.from({ length: 10 }, (v, i) => i + 1);
 
 const offersByTypes = [
   {
@@ -131,7 +130,7 @@ const destinations = [
     name: 'Chamonix',
     pictures: [
       {
-        src: `https://loremflickr.com/248/152?random=${randomPic}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(pictures)}`,
         description: 'Chamonix parliament building'
       }
     ]
@@ -142,7 +141,7 @@ const destinations = [
     name: 'Geneve',
     pictures: [
       {
-        src: `https://loremflickr.com/248/152?random=${randomPic}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(pictures)}`,
         description: 'Gen Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
       }
     ]
@@ -153,7 +152,7 @@ const destinations = [
     name: 'Amsterdam',
     pictures: [
       {
-        src: `https://loremflickr.com/248/152?random=${randomPic}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(pictures)}`,
         description: 'Amst Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.'
       }
     ]
