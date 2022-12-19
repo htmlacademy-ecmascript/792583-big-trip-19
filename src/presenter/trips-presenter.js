@@ -16,38 +16,52 @@ export default class TripPresenter {
   #listPoints = [];
 
   #renderPoint(point) {
-    const pointComponent = new PointView({ point });
-    const pointEditComponent = new EditPointView({ point });
+    // const pointComponent = new PointView({ point });
+    // const pointEditComponent = new EditPointView({ point });
 
-    const replaceCardToForm = () => {
-      this.#tripListComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
-    };
+    // const replaceCardToForm = () => {
+    //   this.#tripListComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
+    // };
 
-    const replaceFormToCard = () => {
-      this.#tripListComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
-    };
+    // const replaceFormToCard = () => {
+    //   this.#tripListComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
+    // };
 
     const escKeyDownHandler = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
-        replaceFormToCard();
+        // replaceFormToCard();
+        replaceFormToCard.call(this);
         document.removeEventListener('keydown', escKeyDownHandler);
       }
     };
 
-    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-      replaceCardToForm();
-      document.addEventListener('keydown', escKeyDownHandler);
+    const pointComponent = new PointView({
+      point,
+      onEditClick: () => {
+        replaceCardToForm.call(this);
+        document.addEventListener('keydown', escKeyDownHandler);
+      }
     });
 
-    pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-      replaceFormToCard();
-      document.removeEventListener('keydown', escKeyDownHandler);
+    const pointEditComponent = new EditPointView({
+      point,
+      onEditClick: () => {
+        replaceFormToCard.call(this);
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
     });
+    function replaceCardToForm() {
+      this.#tripListComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
+    }
+
+    function replaceFormToCard() {
+      this.#tripListComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
+    }
 
     pointEditComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
       evt.preventDefault();
-      // replaceFormToCard();
+      replaceFormToCard();
       document.removeEventListener('keydown', escKeyDownHandler);
     });
 

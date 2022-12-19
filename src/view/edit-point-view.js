@@ -106,13 +106,23 @@ const createEditPointTemplate = (point) => {
 export default class EditPointView extends AbstractView {
 
   #point = null;
+  #handleEditClick = null;
 
-  constructor({ point = BLANK_POINT }) {
+  constructor({ point = BLANK_POINT, onEditClick }) {
     super();
     this.#point = point;
+    this.#handleEditClick = onEditClick;
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#editClickHandler);
   }
 
   get template() {
     return createEditPointTemplate(this.#point);
   }
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 }
