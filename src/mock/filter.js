@@ -9,11 +9,10 @@ function generateFilter(points) {
   );
 }
 
-function generateSort(points) {
+function generateSort() {
   return Object.entries(sort).map(
-    ([sortName, sortPoints]) => ({
+    ([sortName]) => ({
       name: sortName,
-      count: sortPoints(points).length,
     })
   );
 }
