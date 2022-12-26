@@ -143,8 +143,32 @@ const createNewPointTemplate = () =>
     </form>
   </li>`;
 
-export default class NewPointView extends AbstractView {
+export default class NewEventView extends AbstractView {
+  #buttonCancel = null;
+  #handleEventSubmit = null;
+
+  constructor(onButtonCancel, onEventSubmit) {
+    super();
+    this.#buttonCancel = onButtonCancel;
+    this.#handleEventSubmit = onEventSubmit;
+
+    this.element.querySelector('.event__reset-btn')
+      .addEventListener('click', this.#cancelHandler);
+    this.element.querySelector('.event__save-btn')
+      .addEventListener('submit', this.#submitHandler);
+  }
+
   get template() {
     return createNewPointTemplate();
   }
+
+  #cancelHandler = (evt) => {
+    evt.preventDefault();
+    this.#buttonCancel();
+  };
+
+  #submitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEventSubmit();
+  };
 }

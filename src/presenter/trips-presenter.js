@@ -3,9 +3,10 @@ import PointView from '../view/point-view.js';
 import TripListView from '../view/trip-list-view.js';
 import { render, replace } from '../framework/render.js';
 import ListEmptyView from '../view/list-empty-view.js';
+import NewEventBtnView from '../view/btn-new-event-view.js';
 
 const mainEventsElement = document.querySelector('.trip-events');
-
+const tripMain = document.querySelector('.trip-main');
 export default class TripPresenter {
   #pointsModel = null;
   #tripContainer = null;
@@ -61,6 +62,7 @@ export default class TripPresenter {
   }
 
   init() {
+    render(new NewEventBtnView(), tripMain);
     this.#listPoints = [...this.#pointsModel.points];
     if (this.#listPoints.length === 0) {
       render(new ListEmptyView(), mainEventsElement);
