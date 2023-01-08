@@ -19,6 +19,7 @@ export default class TripPresenter {
 
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#tripListComponent.element,
+      onDataChange: this.#handlePointChange,
     });
 
     pointPresenter.init(point);
