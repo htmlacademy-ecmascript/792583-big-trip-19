@@ -167,8 +167,8 @@ const mockPoints = [
     destination: 2,
     basePrice: 500,
     isFavorite: false,
-    dateFrom: '2022-12-23T18:00:56.845Z',
-    dateTo: '2022-12-31T23:00:13.375Z'
+    dateFrom: '2023-01-23T18:00:56.845Z',
+    dateTo: '2023-01-31T23:00:13.375Z'
   },
   {
     id: 1,
@@ -187,8 +187,8 @@ const mockPoints = [
     destination: 1,
     basePrice: 300,
     isFavorite: false,
-    dateFrom: '2022-12-30T22:55:56.845Z',
-    dateTo: '2022-12-31T11:22:13.375Z'
+    dateFrom: '2023-01-30T22:55:56.845Z',
+    dateTo: '2023-01-31T11:22:13.375Z'
   },
   {
     id: 3,
