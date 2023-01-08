@@ -3,6 +3,7 @@ import { render, replace } from '../framework/render.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../utils/common.js';
+import ListSortView from '../view/list-sort-view.js';
 
 
 const mainEventsElement = document.querySelector('.trip-events');
@@ -15,7 +16,7 @@ export default class TripPresenter {
   #noPointsComponent = new ListEmptyView();
   #listPoints = [];
   #pointPresenter = new Map();
-
+  #sortComponent = null;
   #renderPoint(point) {
 
     const pointPresenter = new PointPresenter({
@@ -45,6 +46,18 @@ export default class TripPresenter {
     this.#listPoints = updateItem(this.#listPoints, updatedPoint);
 
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #handleSortTypeChange = (sortType) => {
+
+  };
+
+  #renderSort() {
+    this.#sortComponent = new ListSortView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+
+    render(this.#sortComponent, mainEventsElement);
   };
 
   constructor({ tripContainer, pointsModel }) {
