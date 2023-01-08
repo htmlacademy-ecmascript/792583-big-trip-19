@@ -12,6 +12,7 @@ export default class TripPresenter {
   #tripContainer = null;
 
   #tripListComponent = new TripListView();
+  #noPointsComponent = new ListEmptyView();
   #listPoints = [];
   #pointPresenter = new Map();
 
@@ -20,13 +21,16 @@ export default class TripPresenter {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#tripListComponent.element,
       onDataChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange
     });
 
     pointPresenter.init(point);
     this.#pointPresenter.set(point.id, pointPresenter);
   }
 
-  #noPointsComponent = new ListEmptyView();
+  #handleModeChange = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.resetView());
+  };
 
   #renderNoPoints() {
     render(this.#noPointsComponent, mainEventsElement);
