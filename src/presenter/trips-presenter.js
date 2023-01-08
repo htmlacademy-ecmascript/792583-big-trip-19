@@ -1,9 +1,8 @@
-import EditPointView from '../view/edit-point-view.js';
-import PointView from '../view/point-view.js';
 import TripListView from '../view/trip-list-view.js';
 import { render, replace } from '../framework/render.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import PointPresenter from './point-presenter.js';
+import { updateItem } from '../utils/common.js';
 
 
 const mainEventsElement = document.querySelector('.trip-events');
@@ -36,6 +35,12 @@ export default class TripPresenter {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
   }
+
+  #handlePointChange = (updatedPoint) => {
+    this.#listPoints = updateItem(this.#listPoints, updatedPoint);
+
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
+  };
 
   constructor({ tripContainer, pointsModel }) {
     this.#tripContainer = tripContainer;
