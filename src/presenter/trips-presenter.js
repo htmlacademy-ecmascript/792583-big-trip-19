@@ -6,6 +6,8 @@ import { updateItem } from '../utils/common.js';
 import ListSortView from '../view/list-sort-view.js';
 import { SortType } from '../const.js';
 import { sortPointUp, sortPointDown } from '../utils/task.js';
+import { sort } from '../utils/filter.js';
+import { sortedPoints } from '../utils/filter.js';
 
 
 const mainEventsElement = document.querySelector('.trip-events');
@@ -55,10 +57,16 @@ export default class TripPresenter {
   #sortPoints(sortType) {
     switch (sortType) {
       case SortType.DAY:
-        this.#listPoints.sort(sortPointUp);
+        this.#listPoints = sortedPoints(this.#listPoints, SortType.DAY);
         break;
       case SortType.TIME:
-        this.#listPoints.sort(sortPointDown);
+        this.#listPoints = sortedPoints(this.#listPoints, SortType.TIME);
+        break;
+      case SortType.PRICE:
+        this.#listPoints = sortedPoints(this.#listPoints, SortType.PRICE);
+        break;
+      case SortType.OFFERS:
+        this.#listPoints = sortedPoints(this.#listPoints, SortType.OFFERS);
         break;
       default:
         // 3. А когда пользователь захочет "вернуть всё, как было",
@@ -67,7 +75,7 @@ export default class TripPresenter {
     }
 
     this.#currentSortType = sortType;
-  };
+  }
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
@@ -91,7 +99,7 @@ export default class TripPresenter {
     });
 
     render(this.#sortComponent, mainEventsElement);
-  };
+  }
 
   constructor({ tripContainer, pointsModel }) {
     this.#tripContainer = tripContainer;

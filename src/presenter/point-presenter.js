@@ -63,7 +63,7 @@ export default class PointPresenter {
     if (this.#mode !== Mode.DEFAULT) {
       this.#replaceFormToCard();
     }
-  };
+  }
 
   #replaceCardToForm() {
     replace(this.#pointEditComponent, this.#pointComponent);

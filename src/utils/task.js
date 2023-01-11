@@ -49,5 +49,6 @@ export {
   isTaskExpired,
   isTaskExpiringToday,
   sortPointDown,
-  sortPointUp
+  sortPointUp,
+  getWeightForNullDate
 };
