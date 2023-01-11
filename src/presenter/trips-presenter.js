@@ -1,12 +1,10 @@
 import TripListView from '../view/trip-list-view.js';
-import { render, replace } from '../framework/render.js';
+import { render } from '../framework/render.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../utils/common.js';
 import ListSortView from '../view/list-sort-view.js';
 import { SortType } from '../const.js';
-import { sortPointUp, sortPointDown } from '../utils/task.js';
-import { sort } from '../utils/filter.js';
 import { sortedPoints } from '../utils/filter.js';
 
 
