@@ -36,6 +36,7 @@ export default class PointPresenter {
       point: this.#point,
       onEditClick: this.#handleEditClick,
       onFormSubmit: this.#handleFormSubmit,
+      onFormClose: this.#handleFormClose,
     });
 
     // render(this.#pointComponent, this.#pointListContainer);
@@ -94,6 +95,10 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = () => {
+    this.#replaceFormToCard();
+  };
+
+  #handleFormClose = () => {
     this.#replaceFormToCard();
   };
 

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FilterType, SortType } from '../const.js';
+import { FilterType } from '../const.js';
 
 const isStartDateExpired = (dateFrom) => dayjs(dateFrom).isAfter(dayjs());
 
@@ -18,29 +18,4 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => isPastEvent(point.dateFrom, point.dateTo)),
 };
 
-const sort = {
-  [SortType.DAY]: (points) => points.sort((from, to) => dayjs(from.dateFrom).diff(dayjs(to.dateFrom))),
-  [SortType.EVENT]: (points) => points,
-  [SortType.TIME]: (points) => points,
-  [SortType.PRICE]: (points) => points.sort((from, to) => to.basePrice - from.basePrice),
-  [SortType.OFFERS]: (points) => points,
-};
-
-const sortedPoints = (points, sortType) => {
-  switch (sortType) {
-    case SortType.DAY:
-      return points.sort((pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom)));
-    case SortType.TIME:
-      return points.sort((pointA, pointB) =>
-        dayjs(pointA.dateTo).diff(pointA.dateFrom) - dayjs(pointB.dateTo).diff(pointB.dateFrom));
-    case SortType.OFFERS:
-      return points.sort((pointA, pointB) => pointA.offers.length - pointB.offers.length);
-    case SortType.PRICE:
-      return points.sort((pointA, pointB) => pointA.basePrice - pointB.basePrice);
-    default:
-      return points;
-  }
-};
-
-
-export { filter, sort, sortedPoints };
+export { filter };

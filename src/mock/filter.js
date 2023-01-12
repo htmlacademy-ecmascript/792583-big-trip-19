@@ -1,4 +1,5 @@
-import { filter, sort } from '../utils/filter.js';
+import { filter } from '../utils/filter.js';
+import { sort } from '../utils/task.js';
 
 function generateFilter(points) {
   return Object.entries(filter).map(
