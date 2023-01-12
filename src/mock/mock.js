@@ -1,4 +1,5 @@
 import { getRandomArrayElement } from '../utils/common.js';
+import { nanoid } from 'nanoid';
 
 const pictures = Array.from({ length: 10 }, (v, i) => i + 1);
 
@@ -167,8 +168,8 @@ const mockPoints = [
     destination: 2,
     basePrice: 500,
     isFavorite: false,
-    dateFrom: '2022-12-23T18:00:56.845Z',
-    dateTo: '2022-12-31T23:00:13.375Z'
+    dateFrom: '2023-01-23T18:00:56.845Z',
+    dateTo: '2023-01-31T23:00:13.375Z'
   },
   {
     id: 1,
@@ -187,8 +188,8 @@ const mockPoints = [
     destination: 1,
     basePrice: 300,
     isFavorite: false,
-    dateFrom: '2022-12-30T22:55:56.845Z',
-    dateTo: '2022-12-31T11:22:13.375Z'
+    dateFrom: '2023-01-30T22:55:56.845Z',
+    dateTo: '2023-01-31T11:22:13.375Z'
   },
   {
     id: 3,
@@ -252,7 +253,13 @@ const mockPoints = [
   }
 ];
 
-const getRandomPoint = () => (getRandomArrayElement(mockPoints));
+function getRandomPoint() {
+  return {
+    id: nanoid(),
+    ...getRandomArrayElement(mockPoints)
+  };
+
+}
 
 
 export { mockPoints, destinations, offersByTypes, getRandomPoint };
