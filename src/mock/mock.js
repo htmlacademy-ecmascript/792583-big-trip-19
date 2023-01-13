@@ -178,8 +178,8 @@ const mockPoints = [
     destination: 1,
     basePrice: 200,
     isFavorite: false,
-    dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z'
+    dateFrom: '2023-01-26T22:55:56.845Z',
+    dateTo: '2023-01-27T11:22:13.375Z'
   },
   {
     id: 2,
@@ -208,7 +208,7 @@ const mockPoints = [
     destination: 3,
     basePrice: 50,
     isFavorite: false,
-    dateFrom: '2019-07-10T22:55:56.845Z',
+    dateFrom: '2019-07-10T20:55:56.845Z',
     dateTo: '2019-07-11T11:22:13.375Z'
   },
   {
@@ -228,7 +228,7 @@ const mockPoints = [
     destination: 3,
     basePrice: 200,
     isFavorite: false,
-    dateFrom: '2019-07-10T22:55:56.845Z',
+    dateFrom: '2019-07-19T21:55:56.845Z',
     dateTo: '2019-07-11T11:22:13.375Z'
   },
   {
@@ -248,7 +248,7 @@ const mockPoints = [
     destination: 1,
     basePrice: 300,
     isFavorite: true,
-    dateFrom: '2019-07-10T22:55:56.845Z',
+    dateFrom: '2019-07-10T19:40:56.845Z',
     dateTo: '2019-07-11T11:22:13.375Z'
   }
 ];
