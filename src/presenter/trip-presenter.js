@@ -80,7 +80,7 @@ export default class TripPresenter {
 
     this.#sortPoints(sortType);
     this.#clearPointList();
-    // this.#renderPointList();
+    this.#renderList();
   };
 
   #renderPoints(from, to) {
@@ -91,10 +91,28 @@ export default class TripPresenter {
 
   #renderSort() {
     this.#sortComponent = new ListSortView({
-      onSortTypeChange: this.#handleSortTypeChange
+      onSortTypeChange: this.#handleSortTypeChange,
     });
 
     render(this.#sortComponent, mainEventsElement);
+  }
+
+  #renderList() {
+    if (!this.#listPoints.length) {
+      this.#renderNoPoints();
+      mainEventsElement.removeChild(document.querySelector('.trip-sort'));
+    } else {
+      render(this.#tripListComponent, mainEventsElement);
+      this.#sortPoints(this.#currentSortType);
+      for (let i = 0; i < this.#listPoints.length; i++) {
+        this.#renderPoint(this.#listPoints[i]);
+      }
+    }
+  }
+
+  #renderBoard() {
+    this.#renderSort();
+    this.#renderList();
   }
 
   constructor({ tripContainer, pointsModel }) {
@@ -103,17 +121,9 @@ export default class TripPresenter {
   }
 
   init() {
-    // render(new NewEventBtnView(), tripMain);
     this.#listPoints = [...this.#pointsModel.points];
     this.#sourcedListPoints = [...this.#pointsModel.points];
-    if (!this.#listPoints.length) {
-      this.#renderNoPoints();
-      mainEventsElement.removeChild(document.querySelector('.trip-sort'));
-    } else {
-      render(this.#tripListComponent, mainEventsElement);
-      for (let i = 0; i < this.#listPoints.length; i++) {
-        this.#renderPoint(this.#listPoints[i]);
-      }
-    }
+
+    this.#renderBoard();
   }
 }

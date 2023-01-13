@@ -51,7 +51,7 @@ const sortPoints = (points, sortType) => {
       return points.sort((pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom)));
     case SortType.TIME:
       return points.sort((pointA, pointB) =>
-        dayjs(pointA.dateTo).diff(pointA.dateFrom) - dayjs(pointB.dateTo).diff(pointB.dateFrom));
+        dayjs(pointB.dateTo).diff(pointB.dateFrom) - dayjs(pointA.dateTo).diff(pointA.dateFrom));
     case SortType.OFFERS:
       return points.sort((pointA, pointB) => pointA.offers.length - pointB.offers.length);
     case SortType.PRICE:
