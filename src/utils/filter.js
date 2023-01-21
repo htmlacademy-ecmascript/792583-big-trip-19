@@ -18,4 +18,19 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => isPastEvent(point.dateFrom, point.dateTo)),
 };
 
-export { filter };
+const filterPoints = (points, filterType) => {
+  switch (filterType) {
+    case FilterType.EVERYTHING:
+      return points;
+    case FilterType.FUTURE:
+      return points.filter((point) => isFutureEvent(point.dateFrom, point.dateTo));
+    case FilterType.PRESENT:
+      return points.filter((point) => isPresentEvent(point.dateFrom, point.dateTo));
+    case FilterType.PAST:
+      return points.filter((point) => isPastEvent(point.dateFrom, point.dateTo));
+    default:
+      return points;
+  }
+};
+
+export { filter, filterPoints };

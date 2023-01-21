@@ -1,7 +1,7 @@
-import AbstractView from '../framework/view/abstract-view.js';
 import { destinations, offersByTypes } from '../mock/mock.js';
 import dayjs from 'dayjs';
 import { TYPE } from '../const.js';
+import AbsrtactStatefulView from '../framework/view/abstract-stateful-view.js';
 
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
 const BLANK_POINT = {
@@ -32,15 +32,28 @@ const createEditPointTemplate = (point) => {
   const offersTemplate = pointTypeOffer.offers
     .map((offer) => `
   <div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-1" type="checkbox" name=${offer.title} ${offers.includes(offer.id) ? 'checked' : ''}>
-    <label class="event__offer-label" for="event-offer-${offer.type}-1">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="${offer.title}" data-offer-id="${offer.id}" ${offers.includes(offer.id) ? 'checked' : ''}>
+    <label class="event__offer-label" for="event-offer-${offer.title}-${offer.id}">
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${offer.price}</span>
     </label>
   </div>`).join('');
 
-  const destinationToChoose = destinations.map((element) => `<option value="${element.name}"></option>`).join('');
+  const destinationTemplate = destinations.map((element) => `<option value="${element.name}"></option>`).join('');
+
+  //пытался скрыть секцию офферс
+  const offersSection = pointTypeOffer.offers ? `<section class="event__section  event__section--offers">
+  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  <div class="event__available-offers">
+    ${offersTemplate}
+  </div>
+</section>` : '';
+  const photosTemplate = pointDestination.pictures ? `<div class="event__photos-container">
+  <div class="event__photos-tape">
+    ${pointDestination.pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}"></img>`).join('')}
+  </div>
+</div>` : '';
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -64,7 +77,7 @@ const createEditPointTemplate = (point) => {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination.name}" list="destination-list-1">
         <datalist id="destination-list-1">
-          ${destinationToChoose}
+          ${destinationTemplate}
         </datalist>
       </div>
       <div class="event__field-group  event__field-group--time">
@@ -88,22 +101,20 @@ const createEditPointTemplate = (point) => {
       </button>
     </header>
     <section class="event__details">
-      <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-        <div class="event__available-offers">
-          ${offersTemplate}
-        </div>
-      </section>
+
+    ${offersSection}
+
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${pointDestination.description}</p>
+        ${photosTemplate}
       </section>
     </section>
   </form>
   </li>`;
 };
 
-export default class EditPointView extends AbstractView {
+export default class EditPointView extends AbsrtactStatefulView {
 
   #point = null;
   #handleFormSubmit = null;
@@ -111,27 +122,108 @@ export default class EditPointView extends AbstractView {
 
   constructor({ point = BLANK_POINT, onFormSubmit, onFormClose }) {
     super();
-    this.#point = point;
+    // this.#point = point;
+    this._setState(EditPointView.parsePointToState(point));
     this.#handleFormSubmit = onFormSubmit;
     this.#handleFormClose = onFormClose;
-
-    this.element.querySelector('form')
-      .addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#formCloseHandler);
+    this._restoreHandlers();
   }
 
   get template() {
-    return createEditPointTemplate(this.#point);
+    // return createEditPointTemplate(this.#point);
+    return createEditPointTemplate(this._state);
+  }
+
+  reset(point) {
+    this.updateElement(
+      EditPointView.parsePointToState(point),
+    );
+  }
+
+  _restoreHandlers() {
+    this.element.querySelector('.event--edit')
+      .addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formCloseHandler);
+    this.element.querySelector('.event__input--destination')
+      .addEventListener('change', this.#destinationHandler);
+    this.element.querySelector('.event__type-group')
+      .addEventListener('change', this.#typeHandler);
+    this.element.querySelector('.event__available-offers')
+      .addEventListener('change', this.#offerEventHandler);
+    this.element.querySelector('.event__input--price')
+      .addEventListener('input', this.#priceInputHandler);
   }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(this.#point);
+    // this.#handleFormSubmit(this.#point);
+    this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
   };
 
   #formCloseHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormClose();
   };
+
+  #typeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      type: evt.target.value,
+      offers: [],
+    });
+  };
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+
+    this._setState({
+      basePrice: evt.target.value
+    });
+  };
+
+  #offerEventHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      offers: evt.target.value,
+    });
+  };
+
+  #destinationHandler = (evt) => {
+    evt.preventDefault();
+    // this.updateElement({
+    //   destination: !this._state.destination.id,
+    const checkDestination = destinations.find((destination) => evt.target.value === destination.name);
+
+    this.updateElement({
+      destination: checkDestination.id,
+      pictures: []
+    });
+  };
+
+  static parsePointToState(point) {
+    return {
+      ...point
+    };
+  }
+
+  static parseStateToPoint(state) {
+    const point = { ...state };
+
+    if (!point.type) {
+      point.type = null;
+    }
+    if (!point.offers) {
+      point.offers = null;
+    }
+    if (!point.destination) {
+      point.destination = null;
+    }
+
+    delete point.type;
+    delete point.offers;
+    delete point.destination;
+
+    return point;
+  }
 }

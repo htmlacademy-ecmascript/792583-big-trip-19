@@ -4,11 +4,15 @@ import ListEmptyView from '../view/list-empty-view.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../utils/common.js';
 import ListSortView from '../view/list-sort-view.js';
-import { SortType } from '../const.js';
-import { sortPoints } from '../utils/task';
+import ListFilterView from '../view/list-filter-view.js';
+import { FilterType, SortType } from '../const.js';
+import { sortPoints } from '../utils/task.js';
+import { filterPoints } from '../utils/filter.js';
+import { generateFilter } from '../mock/filter.js';
 
 
 const mainEventsElement = document.querySelector('.trip-events');
+const mainTopElement = document.querySelector('.trip-controls');
 
 export default class TripPresenter {
   #pointsModel = null;
@@ -17,9 +21,13 @@ export default class TripPresenter {
   #tripListComponent = new TripListView();
   #noPointsComponent = new ListEmptyView();
   #listPoints = [];
+  #filteredPoints = [];
   #pointPresenter = new Map();
+  #currentFilterType = FilterType.EVERYTHING;
   #currentSortType = SortType.DAY;
   #sourcedListPoints = [];
+  #soursedFilterPoints = [];
+  #filterComponent = null;
   #sortComponent = null;
   #renderPoint(point) {
 
@@ -48,6 +56,7 @@ export default class TripPresenter {
 
   #handlePointChange = (updatedPoint) => {
     this.#listPoints = updateItem(this.#listPoints, updatedPoint);
+    this.#filteredPoints = updateItem(this.#filteredPoints, updatedPoint);//
     this.#sourcedListPoints = updateItem(this.#sourcedListPoints, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
   };
@@ -73,6 +82,27 @@ export default class TripPresenter {
     this.#currentSortType = sortType;
   }
 
+  #filterPoints(filterType) {
+    switch (filterType) {
+      case FilterType.EVERYTHING:
+        this.#listPoints = filterPoints(this.#listPoints, FilterType.EVERYTHING);
+        break;
+      case FilterType.FUTURE:
+        this.#listPoints = filterPoints(this.#listPoints, FilterType.FUTURE);
+        break;
+      case FilterType.PRESENT:
+        this.#listPoints = filterPoints(this.#listPoints, FilterType.PRESENT);
+        break;
+      case FilterType.PAST:
+        this.#listPoints = filterPoints(this.#listPoints, FilterType.PAST);
+        break;
+      default:
+        this.#listPoints = [...this.#sourcedListPoints];
+    }
+
+    this.#currentFilterType = filterType;
+  }//
+
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
@@ -83,11 +113,15 @@ export default class TripPresenter {
     this.#renderList();
   };
 
-  #renderPoints(from, to) {
-    this.#listPoints
-      .slice(from, to)
-      .forEach((point) => this.#renderPoint(point));
-  }
+  #handleFilterChange = (filterType) => {
+    if (this.#currentFilterType === filterType) {
+      return;
+    }
+
+    this.#filterPoints(filterType);
+    this.#clearPointList();
+    this.#renderList();
+  };//
 
   #renderSort() {
     this.#sortComponent = new ListSortView({
@@ -97,7 +131,18 @@ export default class TripPresenter {
     render(this.#sortComponent, mainEventsElement);
   }
 
+  #renderFilter() {
+    const filters = generateFilter(this.#listPoints);
+    this.#filterComponent = new ListFilterView({
+      filters,
+      onFilterTypeChange: this.#handleFilterChange,
+    });
+
+    render(this.#filterComponent, mainTopElement);
+  }//
+
   #renderList() {
+    // this.#renderFilter();//
     if (!this.#listPoints.length) {
       this.#renderNoPoints();
       mainEventsElement.removeChild(document.querySelector('.trip-sort'));
@@ -111,8 +156,13 @@ export default class TripPresenter {
   }
 
   #renderBoard() {
+    // this.#renderFilter();
     this.#renderSort();
     this.#renderList();
+  }
+
+  #renderTripMain() {
+    this.#renderFilter();
   }
 
   constructor({ tripContainer, pointsModel }) {
@@ -121,8 +171,10 @@ export default class TripPresenter {
   }
 
   init() {
+    this.#filteredPoints = [...this.#pointsModel.points];
     this.#listPoints = [...this.#pointsModel.points];
     this.#sourcedListPoints = [...this.#pointsModel.points];
+    this.#soursedFilterPoints = [...this.#pointsModel.points];
 
     this.#renderBoard();
   }
