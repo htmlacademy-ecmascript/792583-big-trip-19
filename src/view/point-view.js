@@ -1,6 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { destinations, offersByTypes } from '../mock/mock.js';
 import dayjs from 'dayjs';
+import { durationDate } from '../utils/date.js';
 
 const DATE_FORMAT_DATE = 'MMM DD';
 const DATE_FORMAT_TIME = 'HH:mm';
@@ -13,10 +14,14 @@ const createPointTemplate = (point) => {
     .filter((offer) => offers.includes(offer.id));
 
   const offersTemplate = () => {
-    if (!checkedOffers.length) {
+    if (!pointTypeOffer) {
       return `<li class="event__offer">
     <span class="event__offer-title">No additional offers</span>
     </li>`;
+    } else if (!offers) {
+      return `<li class="event__offer">
+  <span class="event__offer-title"></span>
+  </li>`;
     } else {
       const template = checkedOffers.map((offer) => `<li class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
@@ -47,7 +52,7 @@ const createPointTemplate = (point) => {
             &mdash;
             <time class="event__end-time" datetime="${dateTo}">${parceDateEnd.format(DATE_FORMAT_TIME)}</time>
           </p>
-          <p class="event__duration">40M</p>
+          <p class="event__duration">${durationDate(dateFrom, dateTo)}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

@@ -144,7 +144,11 @@ const destinations = [
       {
         src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(pictures)}`,
         description: 'Gen Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
-      }
+      },
+      {
+        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(pictures)}`,
+        description: 'Ten Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
+      },
     ]
   },
   {
@@ -155,7 +159,15 @@ const destinations = [
       {
         src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(pictures)}`,
         description: 'Amst Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.'
-      }
+      },
+      {
+        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(pictures)}`,
+        description: 'Treeen Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
+      },
+      {
+        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(pictures)}`,
+        description: 'Rteen Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
+      },
     ]
   }
 ];
@@ -188,8 +200,8 @@ const mockPoints = [
     destination: 1,
     basePrice: 300,
     isFavorite: false,
-    dateFrom: '2023-01-30T22:55:56.845Z',
-    dateTo: '2023-01-31T11:22:13.375Z'
+    dateFrom: '2023-01-30T21:55:56.845Z',
+    dateTo: '2023-01-31T09:22:13.375Z'
   },
   {
     id: 3,
@@ -199,7 +211,7 @@ const mockPoints = [
     basePrice: 100,
     isFavorite: false,
     dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z'
+    dateTo: '2019-07-11T08:22:13.375Z'
   },
   {
     id: 4,
@@ -208,8 +220,8 @@ const mockPoints = [
     destination: 3,
     basePrice: 50,
     isFavorite: false,
-    dateFrom: '2019-07-10T20:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z'
+    dateFrom: '2019-07-10T23:55:56.845Z',
+    dateTo: '2019-07-11T14:22:13.375Z'
   },
   {
     id: 5,
@@ -218,8 +230,8 @@ const mockPoints = [
     destination: 1,
     basePrice: 150,
     isFavorite: false,
-    dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z'
+    dateFrom: '2019-07-10T22:35:56.845Z',
+    dateTo: '2019-07-11T11:42:13.375Z'
   },
   {
     id: 6,
@@ -228,8 +240,8 @@ const mockPoints = [
     destination: 3,
     basePrice: 200,
     isFavorite: false,
-    dateFrom: '2019-07-19T21:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z'
+    dateFrom: '2023-07-19T21:55:56.845Z',
+    dateTo: '2023-08-03T11:22:13.375Z'
   },
   {
     id: 7,
@@ -238,8 +250,8 @@ const mockPoints = [
     destination: 2,
     basePrice: 120,
     isFavorite: true,
-    dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z'
+    dateFrom: '2019-07-10T22:25:56.845Z',
+    dateTo: '2019-07-11T11:12:13.375Z'
   },
   {
     id: 8,
