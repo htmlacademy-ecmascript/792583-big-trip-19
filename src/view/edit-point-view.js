@@ -248,14 +248,13 @@ export default class EditPointView extends AbsrtactStatefulView {
 
   #destinationHandler = (evt) => {
     evt.preventDefault();
-    // this.updateElement({
-    //   destination: !this._state.destination.id,
-    const checkDestination = destinations.find((destination) => evt.target.value === destination.name);
-
-    this.updateElement({
-      destination: checkDestination.id,
-      pictures: []
-    });
+    const selectedDestination = destinations.find((destination) => evt.target.value === destination.name);
+    if (selectedDestination !== undefined) {
+      this.updateElement({
+        destination: selectedDestination.id,
+        pictures: []
+      });
+    }
   };
 
   static parsePointToState(point) {

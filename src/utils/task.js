@@ -49,6 +49,8 @@ const sortPoints = (points, sortType) => {
   switch (sortType) {
     case SortType.DAY:
       return points.sort((pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom)));
+    case SortType.EVENT:
+      return points.sort((pointA, pointB) => dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom)));
     case SortType.TIME:
       return points.sort((pointA, pointB) =>
         dayjs(pointB.dateTo).diff(pointB.dateFrom) - dayjs(pointA.dateTo).diff(pointA.dateFrom));
