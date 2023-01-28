@@ -1,4 +1,4 @@
-const TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const TYPE = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
 const FilterType = {
   EVERYTHING: 'everything',
@@ -15,5 +15,17 @@ const SortType = {
   OFFERS: 'offers'
 };
 
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
 
-export { TYPE, FilterType, SortType };
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+
+export { TYPE, FilterType, SortType, UserAction, UpdateType };

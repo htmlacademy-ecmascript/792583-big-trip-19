@@ -1,21 +1,23 @@
 import dayjs from 'dayjs';
 import { FilterType } from '../const.js';
 
+
 const isStartDateExpired = (dateFrom) => dayjs(dateFrom).isAfter(dayjs());
 
 const isEndDateExpired = (dateTo) => dayjs(dateTo).isAfter(dayjs());
 
-const isFutureEvent = (dateFrom, dateTo) => isStartDateExpired(dateFrom) && isEndDateExpired(dateTo);
+const isFutureEvent = (point) => isStartDateExpired(point.dateFrom) && isEndDateExpired(point.dateTo);
 
-const isPresentEvent = (dateFrom, dateTo) => !isStartDateExpired(dateFrom) && isEndDateExpired(dateTo);
+const isPresentEvent = (point) => !isStartDateExpired(point.dateFrom) && isEndDateExpired(point.dateTo);
 
-const isPastEvent = (dateFrom, dateTo) => !isStartDateExpired(dateFrom) && !isEndDateExpired(dateTo);
+const isPastEvent = (point) => !isStartDateExpired(point.dateFrom) && !isEndDateExpired(point.dateTo);
+
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
-  [FilterType.FUTURE]: (points) => points.filter((point) => isFutureEvent(point.dateFrom, point.dateTo)),
-  [FilterType.PRESENT]: (points) => points.filter((point) => isPresentEvent(point.dateFrom, point.dateTo)),
-  [FilterType.PAST]: (points) => points.filter((point) => isPastEvent(point.dateFrom, point.dateTo)),
+  [FilterType.FUTURE]: (points) => points.filter(isFutureEvent),
+  [FilterType.PRESENT]: (points) => points.filter(isPresentEvent),
+  [FilterType.PAST]: (points) => points.filter(isPastEvent),
 };
 
 const filterPoints = (points, filterType) => {

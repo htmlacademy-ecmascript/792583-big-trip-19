@@ -1,25 +1,25 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { FilterType } from '../const.js';
+// import { FilterType } from '../const.js';
 
-function createFilterItemTemplate(filter) {
+function createFilterItemTemplate(filter, currentFilterType) {
 
-  const { name, count } = filter;
+  const { name, count, type } = filter;
 
   return (
     `<div class="trip-filters__filter">
     <input id="filter-${name}"
     class="trip-filters__filter-input  visually-hidden"
     type="radio" name="trip-filter"
-    value="${name}"${count === 0 ? 'disabled' : ''}${FilterType.EVERYTHING === name ? 'checked' : ''}>
+    value="${type}"${count === 0 ? 'disabled' : ''}${type === currentFilterType ? 'checked' : ''}>
     <label class="trip-filters__filter-label"
     for="filter-${name}">${name}</label>
     </div>`
   );
 }
 
-function createListFilterTemplate(filterItems) {
+function createListFilterTemplate(filterItems, currentFilterType) {
 
-  const filterItemsTemplate = filterItems.map((filter, index) => createFilterItemTemplate(filter, index === 0)).join('');
+  const filterItemsTemplate = filterItems.map((filter) => createFilterItemTemplate(filter, currentFilterType)).join('');
 
   return (
     `<form class="trip-filters" action="#" method="get">
@@ -30,24 +30,27 @@ function createListFilterTemplate(filterItems) {
 }
 export default class ListFilterView extends AbstractView {
   #filters = null;
-  #handleFilterChange = null;
+  #currentFilter = null;
+  #handleFilterTypeChange = null;
 
-  constructor({ filters, onFilterChange }) {
+  constructor({ filters, onFilterTypeChange, currentFilterType }) {
     super();
     this.#filters = filters;
-    this.#handleFilterChange = onFilterChange;
-    this.element.addEventListener('change', this.#filterChangeHadler);
+    this.#currentFilter = currentFilterType;
+    this.#handleFilterTypeChange = onFilterTypeChange;
+    this.element.addEventListener('change', this.#filterTypeChangeHandler);
   }
 
   get template() {
-    return createListFilterTemplate(this.#filters);
+    return createListFilterTemplate(this.#filters, this.#currentFilter);
   }
 
-  #filterChangeHadler = (evt) => {
-    if (evt.target.tagName !== 'LABEL' || evt.target.hasAttribute('disabled')) {
+  #filterTypeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'INPUT') {
       return;
     }
-
-    this.#handleFilterChange(evt.target.dataset.filterType);
+    evt.preventDefault();
+    this.#handleFilterTypeChange(evt.target.value);
   };
+
 }

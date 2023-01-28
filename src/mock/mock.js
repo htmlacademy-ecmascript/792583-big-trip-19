@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 
 const pictures = Array.from({ length: 10 }, (v, i) => i + 1);
 
-const offersByTypes = [
+const offersForType = [
   {
     type: 'flight',
     offers: [
@@ -274,4 +274,4 @@ function getRandomPoint() {
 }
 
 
-export { mockPoints, destinations, offersByTypes, getRandomPoint };
+export { mockPoints, destinations, offersForType, getRandomPoint };

@@ -33,17 +33,17 @@ function getWeightForNullDate(dateA, dateB) {
   return null;
 }
 
-function sortPointUp(pointA, pointB) {
-  const weight = getWeightForNullDate(pointA.dueDate, pointB.dueDate);
+// function sortPointUp(pointA, pointB) {
+//   const weight = getWeightForNullDate(pointA.dueDate, pointB.dueDate);
 
-  return weight ?? dayjs(pointA.dueDate).diff(dayjs(pointB.dueDate));
-}
+//   return weight ?? dayjs(pointA.dueDate).diff(dayjs(pointB.dueDate));
+// }
 
-function sortPointDown(pointA, pointB) {
-  const weight = getWeightForNullDate(pointA.dueDate, pointB.dueDate);
+// function sortPointDown(pointA, pointB) {
+//   const weight = getWeightForNullDate(pointA.dueDate, pointB.dueDate);
 
-  return weight ?? dayjs(pointB.dueDate).diff(dayjs(pointA.dueDate));
-}
+//   return weight ?? dayjs(pointB.dueDate).diff(dayjs(pointA.dueDate));
+// }
 
 const sortPoints = (points, sortType) => {
   switch (sortType) {
@@ -75,8 +75,8 @@ export {
   humanizeTaskDueDate,
   isTaskExpired,
   isTaskExpiringToday,
-  sortPointDown,
-  sortPointUp,
+  // sortPointDown,
+  // sortPointUp,
   getWeightForNullDate,
   sortPoints,
   sort

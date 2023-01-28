@@ -3,24 +3,21 @@ import AbstractView from '../framework/view/abstract-view.js';
 const createNewEventBtnTemplate = () => ('<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">New event</button>');
 export default class NewEventBtnView extends AbstractView {
 
-  // #button = null;
-  #handleButtonClick = null;
+  #handleClick = null;
 
-  constructor({ /* button, */ onNewEventClick }) {
+  constructor({ onClick }) {
     super();
-    // this.#button = button;
-    this.#handleButtonClick = onNewEventClick;
+    this.#handleClick = onClick;
 
-    this.element.querySelector('.trip-main__event-add-btn')
-      .addEventListener('click', this.#btnClickHandler);
+    this.element.addEventListener('click', this.#clickHandler);
   }
 
   get template() {
-    return createNewEventBtnTemplate(/* this.#button */);
+    return createNewEventBtnTemplate();
   }
 
-  #btnClickHandler = (evt) => {
+  #clickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleButtonClick();
+    this.#handleClick();
   };
 }
