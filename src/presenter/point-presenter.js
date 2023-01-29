@@ -1,6 +1,7 @@
 import { render, replace, remove } from '../framework/render.js';
 import PointView from '../view/point-view.js';
 import EditPointView from '../view/edit-point-view.js';
+import { UpdateType, UserAction } from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -13,12 +14,17 @@ export default class PointPresenter {
   #handleDataChange = null;
   #handleModeChange = null;
   #point = null;
+  #offers = null;
+  #destinations = null;
   #mode = Mode.DEFAULT;
 
-  constructor({ pointListContainer, onDataChange, onModeChange }) {
+  constructor({/*  offers, destinations, */ pointListContainer, onDataChange, onModeChange }) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
+
+    // this.#offers = offers;
+    // this.#destinations = destinations;
   }
 
   init(point) {
@@ -30,13 +36,18 @@ export default class PointPresenter {
     this.#pointComponent = new PointView({
       point: this.#point,
       onEditClick: this.#handleEditClick,
-      onFavoriteClick: this.#handleFavoriteClick
+      onFavoriteClick: this.#handleFavoriteClick,
+      // offersForTypes: this.#offers,
+      // destinations: this.#destinations,
     });
     this.#pointEditComponent = new EditPointView({
       point: this.#point,
-      onEditClick: this.#handleEditClick,
+      // offersForTypes: this.#offers,
+      // destinations: this.#destinations,
+      // onEditClick: this.#handleEditClick,
       onFormSubmit: this.#handleFormSubmit,
       onFormClose: this.#handleFormClose,
+      onDeleteClick: this.#handleDeleteClick,
     });
 
     // render(this.#pointComponent, this.#pointListContainer);
@@ -93,15 +104,31 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR, { ...this.#point, isFavorite: !this.#point.isFavorite },
+    );
   };
 
-  #handleFormSubmit = () => {
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
     this.#replaceFormToCard();
   };
 
   #handleFormClose = () => {
     this.#replaceFormToCard();
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
   };
 
 }

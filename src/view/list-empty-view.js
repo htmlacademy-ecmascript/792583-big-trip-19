@@ -1,14 +1,15 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import { FilterType } from '../const.js';
 
-const messageForFilter = {
-  'everything': 'Click New Event to create your first point',
-  'future': 'There are no future events now',
-  'present': 'There are no present events now',
-  'past': 'There are no past events now',
+const NoTasksTextType = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.PAST]: 'There are no past events now',
 };
 
 function createListEmptyTemplate(filterType) {
-  return `<p class="trip-events__msg">${messageForFilter[filterType]}</p>`;
+  return `<p class="trip-events__msg">${NoTasksTextType[filterType]}</p>`;
 }
 export default class ListEmptyView extends AbstractView {
   #filterType = null;
