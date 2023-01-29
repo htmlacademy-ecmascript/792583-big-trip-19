@@ -20,11 +20,12 @@ const createPointTemplate = (point/* , offersForType, destinations */) => {
 
     return pointTypeOffer.offers
       .filter((offer) => offers.includes(offer.id))
-      .map((offer) => `<li class="event__offer">
-                    <span class="event__offer-title">${offer.title}</span>
-                    &plus;&euro;&nbsp;
-                    <span class="event__offer-price">${offer.price}</span>
-                  </li>`).join('');
+      .map((offer) => `
+      <li class="event__offer">
+        <span class="event__offer-title">${offer.title}</span>
+              &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </li>`).join('');
   };
 
   const favoriteClassName = isFavorite

@@ -20,13 +20,10 @@ export default class TripPresenter {
 
   #pointListComponent = new TripListView();
   #noPointsComponent = null;
-  // #listPoints = [];
   #filteredPoints = [];
   #pointPresenter = new Map();
-  // #currentFilterType = FilterType.EVERYTHING;
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
-  // #sourcedListPoints = [];
   #soursedFilterPoints = [];
   #filterComponent = null;
   #sortComponent = null;
@@ -71,7 +68,7 @@ export default class TripPresenter {
     this.#renderBoard();
   }
 
-  createTask() {
+  createPoint() {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
@@ -111,7 +108,6 @@ export default class TripPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-    // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsModel.updatePoint(updateType, update);
@@ -150,7 +146,6 @@ export default class TripPresenter {
       return;
     }
 
-    // this.#sortPoints(sortType);
     this.#currentSortType = sortType;
     this.#clearBoard();
     this.#renderBoard();
@@ -166,18 +161,11 @@ export default class TripPresenter {
   }
 
   #clearBoard({ resetSortType = false } = {}) {
-    // const pointCount = this.points.length;
-
     this.#newPointPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
 
     remove(this.#sortComponent);
-    // remove(this.#noPointsComponent);
-
-    // if (this.#noPointsComponent) {
-    //   remove(this.#noPointsComponent);
-    // }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
@@ -186,11 +174,10 @@ export default class TripPresenter {
 
   #renderBoard() {
     render(this.#pointListComponent, mainEventsElement);
-    // this.#renderFilter();
     const points = this.points;
     const pointsCount = points.length;
     if (!pointsCount) {
-      this.#renderNoPoints();
+      // this.#renderNoPoints();
       return;
     }
     this.#renderSort();
@@ -198,10 +185,5 @@ export default class TripPresenter {
 
       this.#renderPoint(points[i], this.destinations, this.offers,);
     }
-    // this.#renderPointList();
   }
-
-  // #renderTripMain() {
-  //   this.#renderFilter();
-  // }
 }

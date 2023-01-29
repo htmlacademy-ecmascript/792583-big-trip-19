@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { FilterType } from '../const.js';
 
-
 const isStartDateExpired = (dateFrom) => dayjs(dateFrom).isAfter(dayjs());
 
 const isEndDateExpired = (dateTo) => dayjs(dateTo).isAfter(dayjs());

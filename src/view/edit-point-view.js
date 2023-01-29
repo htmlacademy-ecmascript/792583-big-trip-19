@@ -21,6 +21,11 @@ const BLANK_POINT = {
 const createEditPointTemplate = (point) => {
   const { type, offers, destination, basePrice, dateFrom, dateTo } = point;
   const pointTypeOffer = offersForType.find((offer) => offer.type === type);
+  // if (offersForType !== undefined) {
+  //   console.log('undefined offers');
+  //   console.log(BLANK_POINT.offers);
+  //   offersForType = '';
+  // }
   const pointDestination = destinations.find((item) => destination === item.id);
 
   const parceDateStart = dayjs(dateFrom);
@@ -28,7 +33,7 @@ const createEditPointTemplate = (point) => {
 
   const pointTypeItemTemplate = () => offersForType.map((element) =>
     `<div class="event__type-item">
-    <input id="event-type-${element.type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.type}">
+    <input id="event-type-${element.type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.type}"${element.type === type ? 'checked' : ''}>
     <label class="event__type-label  event__type-label--${element.type}" for="event-type-${element.type}-1">${element.type}</label>
   </div>`).join('');
 
@@ -93,7 +98,7 @@ const createEditPointTemplate = (point) => {
         <label class="event__label  event__type-output" for="event-destination-1">
           ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination ? pointDestination.name : ''}" list="destination-list-1" required>
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination ? pointDestination.name : ''}" list="destination-list-1" placeholder="Select a city from the list" required>
         <datalist id="destination-list-1">
           ${destinationTemplate()}
         </datalist>
@@ -119,7 +124,6 @@ const createEditPointTemplate = (point) => {
       </button>
     </header>
     <section class="event__details">
-
     ${offersSectionTemplate()}
     ${destinationSectionTemplate()}
     </section>
@@ -143,7 +147,6 @@ export default class EditPointView extends AbsrtactStatefulView {
     super();
     this._setState(EditPointView.parsePointToState(point));
     this.#point = point;
-    // this.#offersFoTypes = offersForTypes;
     this.#destinations = destinations;
     this.#offersFoType = offersForType;
 
@@ -154,7 +157,6 @@ export default class EditPointView extends AbsrtactStatefulView {
   }
 
   get template() {
-    // return createEditPointTemplate(this.#point);
     return createEditPointTemplate(this._state);
   }
 
@@ -199,14 +201,12 @@ export default class EditPointView extends AbsrtactStatefulView {
       .addEventListener('change', this.#destinationHandler);
     this.element.querySelector('.event__type-group')
       .addEventListener('change', this.#typeHandler);
-    // this.element.querySelector('.event__available-offers')
-    //   .addEventListener('change', this.#offerEventHandler);
     this.element.querySelector('.event__input--price')
       .addEventListener('input', this.#priceInputHandler);
     this.element.querySelector('.event__reset-btn')
       .addEventListener('click', this.#formDeleteClickHandler);
 
-    if (this._state.offer) {
+    if (this._state.offers.length) {
       this.element.querySelector('.event__available-offers')
         .addEventListener('change', this.#offerEventHandler);
     }
@@ -240,7 +240,6 @@ export default class EditPointView extends AbsrtactStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    // this.#handleFormSubmit(this.#point);
     this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
   };
 
@@ -299,19 +298,19 @@ export default class EditPointView extends AbsrtactStatefulView {
   static parseStateToPoint(state) {
     const point = { ...state };
 
-    if (!point.type) {
-      point.type = null;
-    }
-    if (!point.offers) {
-      point.offers = null;
-    }
-    if (!point.destination) {
-      point.destination = null;
-    }
+    // if (!point.type) {
+    //   point.type = null;
+    // }
+    // if (!point.offers) {
+    //   point.offers = null;
+    // }
+    // if (!point.destination) {
+    //   point.destination = null;
+    // }
 
-    delete point.type;
-    delete point.offers;
-    delete point.destination;
+    // delete point.type;
+    // delete point.offers;
+    // delete point.destination;
 
     return point;
   }

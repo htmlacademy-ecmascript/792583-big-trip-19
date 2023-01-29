@@ -5,7 +5,7 @@ const pictures = Array.from({ length: 10 }, (v, i) => i + 1);
 
 const offersForType = [
   {
-    type: 'flight',
+    type: 'Flight',
     offers: [
       {
         id: 1,
@@ -25,7 +25,7 @@ const offersForType = [
     ]
   },
   {
-    type: 'taxi',
+    type: 'Taxi',
     offers: [
       {
         id: 1,
@@ -40,11 +40,11 @@ const offersForType = [
     ]
   },
   {
-    type: 'bus',
+    type: 'Bus',
     offers: []
   },
   {
-    type: 'train',
+    type: 'Train',
     offers: [
       {
         id: 1,
@@ -59,7 +59,7 @@ const offersForType = [
     ]
   },
   {
-    type: 'drive',
+    type: 'Drive',
     offers: [
       {
         id: 1,
@@ -69,7 +69,7 @@ const offersForType = [
     ]
   },
   {
-    type: 'ship',
+    type: 'Ship',
     offers: [
       {
         id: 1,
@@ -89,11 +89,11 @@ const offersForType = [
     ]
   },
   {
-    type: 'restaurant',
+    type: 'Restaurant',
     offers: []
   },
   {
-    type: 'sightseeing',
+    type: 'Sightseeing',
     offers: [
       {
         id: 1,
@@ -108,7 +108,7 @@ const offersForType = [
     ]
   },
   {
-    type: 'check-in',
+    type: 'Check-in',
     offers: [
       {
         id: 1,
@@ -175,7 +175,7 @@ const destinations = [
 const mockPoints = [
   {
     id: 0,
-    type: 'check-in',
+    type: 'Check-in',
     offers: [1, 2],
     destination: 2,
     basePrice: 500,
@@ -185,7 +185,7 @@ const mockPoints = [
   },
   {
     id: 1,
-    type: 'sightseeing',
+    type: 'Sightseeing',
     offers: [1, 2],
     destination: 1,
     basePrice: 200,
@@ -195,7 +195,7 @@ const mockPoints = [
   },
   {
     id: 2,
-    type: 'restaurant',
+    type: 'Restaurant',
     offers: [],
     destination: 1,
     basePrice: 300,
@@ -205,7 +205,7 @@ const mockPoints = [
   },
   {
     id: 3,
-    type: 'taxi',
+    type: 'Taxi',
     offers: [1, 2],
     destination: 2,
     basePrice: 100,
@@ -215,7 +215,7 @@ const mockPoints = [
   },
   {
     id: 4,
-    type: 'bus',
+    type: 'Bus',
     offers: [],
     destination: 3,
     basePrice: 50,
@@ -225,7 +225,7 @@ const mockPoints = [
   },
   {
     id: 5,
-    type: 'train',
+    type: 'Train',
     offers: [1, 2],
     destination: 1,
     basePrice: 150,
@@ -235,7 +235,7 @@ const mockPoints = [
   },
   {
     id: 6,
-    type: 'ship',
+    type: 'Ship',
     offers: [1, 2, 3],
     destination: 3,
     basePrice: 200,
@@ -245,7 +245,7 @@ const mockPoints = [
   },
   {
     id: 7,
-    type: 'drive',
+    type: 'Drive',
     offers: [1],
     destination: 2,
     basePrice: 120,
@@ -255,7 +255,7 @@ const mockPoints = [
   },
   {
     id: 8,
-    type: 'flight',
+    type: 'Flight',
     offers: [1, 2, 3],
     destination: 1,
     basePrice: 300,
