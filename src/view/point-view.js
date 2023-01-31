@@ -1,17 +1,17 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { destinations, offersForType } from '../mock/mock.js';
 import dayjs from 'dayjs';
 import { durationDate } from '../utils/date.js';
+// import he from 'he';
 
 const DATE_FORMAT_DATE = 'MMM DD';
 const DATE_FORMAT_TIME = 'HH:mm';
 
-const createPointTemplate = (point/* , offersForType, destinations */) => {
+const createPointTemplate = (point, offersForType, destinations) => {
 
-  const { type, destination, basePrice, isFavorite, dateFrom, dateTo, offers } = point;
+  const { type, offers, destination, basePrice, isFavorite, dateFrom, dateTo } = point;
 
   const pointTypeOffer = offersForType.find((offer) => offer.type === type);
-  const pointDestination = destinations.find((item) => destination === item.id);
+  const pointDestination = destinations.find((item) => destination === item.type);
 
   const offersTemplate = () => {
     if (!pointTypeOffer) {
@@ -27,10 +27,6 @@ const createPointTemplate = (point/* , offersForType, destinations */) => {
         <span class="event__offer-price">${offer.price}</span>
       </li>`).join('');
   };
-
-  const favoriteClassName = isFavorite
-    ? 'event__favorite-btn event__favorite-btn--active'
-    : 'event__favorite-btn';
 
   const parceDateStart = dayjs(dateFrom);
   const parceDateEnd = dayjs(dateTo);
@@ -57,7 +53,7 @@ const createPointTemplate = (point/* , offersForType, destinations */) => {
         <ul class="event__selected-offers">
           ${offersTemplate()}
         </ul>
-        <button class="${favoriteClassName}" type="button">
+        <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
           <span class="visually-hidden">Add to favorite</span>
             <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
               <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
@@ -78,7 +74,7 @@ export default class PointView extends AbstractView {
   #handleEditClick = null;
   #handleFavoriteClick = null;
 
-  constructor({ point/* , offersForType, destinations, */, onEditClick, onFavoriteClick }) {
+  constructor({ point, offersForType, destinations, onEditClick, onFavoriteClick }) {
     super();
     this.#point = point;
     this.#offersFoType = offersForType;
@@ -94,7 +90,7 @@ export default class PointView extends AbstractView {
   }
 
   get template() {
-    return createPointTemplate(this.#point/* , this.#destinations, this.#offersFoType */);
+    return createPointTemplate(this.#point, this.#destinations, this.#offersFoType);
   }
 
   #editClickHandler = (evt) => {

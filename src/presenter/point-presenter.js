@@ -18,13 +18,13 @@ export default class PointPresenter {
   #destinations = null;
   #mode = Mode.DEFAULT;
 
-  constructor({/*  offers, destinations, */ pointListContainer, onDataChange, onModeChange }) {
+  constructor({ offers, destinations, pointListContainer, onDataChange, onModeChange }) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
 
-    // this.#offers = offers;
-    // this.#destinations = destinations;
+    this.#offers = offers;
+    this.#destinations = destinations;
   }
 
   init(point) {
@@ -37,20 +37,18 @@ export default class PointPresenter {
       point: this.#point,
       onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick,
-      // offersForTypes: this.#offers,
-      // destinations: this.#destinations,
+      offersForType: this.#offers,
+      destinations: this.#destinations,
     });
     this.#pointEditComponent = new EditPointView({
       point: this.#point,
-      // offersForTypes: this.#offers,
-      // destinations: this.#destinations,
-      // onEditClick: this.#handleEditClick,
+      offersForType: this.#offers,
+      destinations: this.#destinations,
       onFormSubmit: this.#handleFormSubmit,
       onFormClose: this.#handleFormClose,
       onDeleteClick: this.#handleDeleteClick,
     });
 
-    // render(this.#pointComponent, this.#pointListContainer);
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#pointListContainer);
       return;
@@ -60,6 +58,7 @@ export default class PointPresenter {
     }
     if (this.#mode === Mode.EDITING) {
       replace(this.#pointEditComponent, prevPointEditComponent);
+      // this.#mode = Mode.DEFAULT;//
     }
 
     remove(prevPointComponent);

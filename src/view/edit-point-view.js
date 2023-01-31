@@ -1,10 +1,9 @@
-import { destinations, offersForType } from '../mock/mock.js';
 import dayjs from 'dayjs';
 import { TYPE } from '../const.js';
 import AbsrtactStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-// import he from 'he';
+import he from 'he';
 
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
 const BLANK_POINT = {
@@ -18,14 +17,9 @@ const BLANK_POINT = {
   dateTo: '2019-07-11T11:22:13.375Z',
 };
 
-const createEditPointTemplate = (point) => {
-  const { type, offers, destination, basePrice, dateFrom, dateTo } = point;
+const createEditPointTemplate = (point, offersForType, destinations) => {
+  const { type, destination, basePrice, dateFrom, dateTo } = point;
   const pointTypeOffer = offersForType.find((offer) => offer.type === type);
-  // if (offersForType !== undefined) {
-  //   console.log('undefined offers');
-  //   console.log(BLANK_POINT.offers);
-  //   offersForType = '';
-  // }
   const pointDestination = destinations.find((item) => destination === item.id);
 
   const parceDateStart = dayjs(dateFrom);
@@ -50,7 +44,7 @@ const createEditPointTemplate = (point) => {
       <div class="event__available-offers">
       ${pointTypeOffer.offers.map((offer) => `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="${offer.title}" data-offer-id="${offer.id}" ${offers.includes(offer.id) ? 'checked' : ''}>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="${offer.title}" data-offer-id="${offer.id}" ${offersForType.includes(offer.id) ? 'checked' : ''}>
             <label class="event__offer-label" for="event-offer-${offer.title}-${offer.id}">
               <span class="event__offer-title">${offer.title}</span>
               &plus;&euro;&nbsp;
@@ -98,7 +92,7 @@ const createEditPointTemplate = (point) => {
         <label class="event__label  event__type-output" for="event-destination-1">
           ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination ? pointDestination.name : ''}" list="destination-list-1" placeholder="Select a city from the list" required>
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination ? he.encode(pointDestination.name) : ''}" list="destination-list-1" placeholder="Select a city from the list" required>
         <datalist id="destination-list-1">
           ${destinationTemplate()}
         </datalist>
@@ -143,10 +137,10 @@ export default class EditPointView extends AbsrtactStatefulView {
   #handleDeleteClick = null;
 
 
-  constructor({ point = BLANK_POINT,/* offersForType, destinationss */ onFormSubmit, onFormClose, onDeleteClick }) {
+  constructor({ point = BLANK_POINT, offersForType, destinations, onFormSubmit, onFormClose, onDeleteClick }) {
     super();
     this._setState(EditPointView.parsePointToState(point));
-    this.#point = point;
+    // this.#point = point;
     this.#destinations = destinations;
     this.#offersFoType = offersForType;
 
@@ -157,7 +151,7 @@ export default class EditPointView extends AbsrtactStatefulView {
   }
 
   get template() {
-    return createEditPointTemplate(this._state);
+    return createEditPointTemplate(this._state, this.#offersFoType, this.#destinations);
   }
 
   reset(point) {
