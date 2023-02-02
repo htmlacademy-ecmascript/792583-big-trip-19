@@ -15,6 +15,13 @@ function isTaskExpiringToday(dueDate) {
   return dueDate && dayjs(dueDate).isSame(dayjs(), 'D');
 }
 
+const getOffersByType = (offers, type) => offers.find((offer) => offer.type === type).offers;
+
+const getSelectedDestination = (destinations, destinationId) => destinations.find((item) => item.id === destinationId);
+
+const getSelectedOffers = (offers, offersIds) => offers.filter((item) => offersIds.some((offerId) => offerId === item.id));
+
+const isOfferIsSelected = (offerId, selectedOffersIds) => selectedOffersIds.includes(offerId);
 // Функция помещает задачи без даты в конце списка,
 // возвращая нужный вес для колбэка sort
 function getWeightForNullDate(dateA, dateB) {
@@ -65,5 +72,9 @@ export {
   isTaskExpiringToday,
   getWeightForNullDate,
   sortPoints,
-  sort
+  sort,
+  getOffersByType,
+  getSelectedDestination,
+  getSelectedOffers,
+  isOfferIsSelected,
 };

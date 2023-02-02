@@ -80,9 +80,6 @@ export default class PointsModel extends Observable {
     }
 
     try {
-      // Обратите внимание, метод удаления задачи на сервере
-      // ничего не возвращает. Это и верно,
-      // ведь что можно вернуть при удалении задачи?
       await this.#pointsApiService.deletePoint(update);
       this.#points = [
         ...this.#points.slice(0, index),
@@ -103,7 +100,6 @@ export default class PointsModel extends Observable {
       isFavorite: point['is_favorite'],
     };
 
-    // Ненужные ключи мы удаляем
     delete adaptedPoint['date_from'];
     delete adaptedPoint['date_to'];
     delete adaptedPoint['base_price'];

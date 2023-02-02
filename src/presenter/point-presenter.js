@@ -37,8 +37,8 @@ export default class PointPresenter {
       point: this.#point,
       onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick,
-      offersForType: this.#offers,
-      destinations: this.#destinations,
+      offersForPoint: this.#offers,
+      destinationsForPoint: this.#destinations,
     });
     this.#pointEditComponent = new EditPointView({
       point: this.#point,
@@ -75,6 +75,41 @@ export default class PointPresenter {
       this.#replaceFormToCard();
       // this.#pointEditComponent.reset(this.#point);
     }
+  }
+
+  setSaving() {
+    if (this.#mode === Mode.EDITING) {
+      this.#pointEditComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  }
+
+  setDeleting() {
+    if (this.#mode === Mode.EDITING) {
+      this.#pointEditComponent.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
+    }
+  }
+
+  setAborting() {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
   }
 
   #replaceCardToForm() {
@@ -115,7 +150,7 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point,
     );
-    this.#replaceFormToCard();
+    // this.#replaceFormToCard();
   };
 
   #handleFormClose = () => {

@@ -1,32 +1,40 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import dayjs from 'dayjs';
 import { durationDate } from '../utils/date.js';
+import { getOffersByType, getSelectedDestination, getSelectedOffers } from '../utils/point.js';
 // import he from 'he';
 
 const DATE_FORMAT_DATE = 'MMM DD';
 const DATE_FORMAT_TIME = 'HH:mm';
 
-const createPointTemplate = (point, offersForType, destinations) => {
+const createOffersTemplate = (offersTemplate) => {
+  if (!offersTemplate.length) {
+    return '';
+  }
+  return offersTemplate
+    .map(
+      (offer) =>
+        `<li class="event__offer">
+          <span class="event__offer-title">${offer.title}</span>
+          +€&nbsp;
+          <span class="event__offer-price">${offer.price}</span>
+        </li>`
+    ).join('');
+};
 
-  const { type, offers, destination, basePrice, isFavorite, dateFrom, dateTo } = point;
+const createPointTemplate = (point, destinations, offers) => {
 
-  const pointTypeOffer = offersForType.find((offer) => offer.type === type);
-  const pointDestination = destinations.find((item) => destination === item.type);
+  const { type, basePrice, isFavorite, dateFrom, dateTo } = point;
 
-  const offersTemplate = () => {
-    if (!pointTypeOffer) {
-      return '';
-    }
+  const offersType = getOffersByType(offers, point.type);
+  const destination = getSelectedDestination(destinations, point.destination);
 
-    return pointTypeOffer.offers
-      .filter((offer) => offers.includes(offer.id))
-      .map((offer) => `
-      <li class="event__offer">
-        <span class="event__offer-title">${offer.title}</span>
-              &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
-      </li>`).join('');
-  };
+  offers = getSelectedOffers(offersType, point.offers);
+
+  if (!destination) {
+    return '';
+  }
+  const { name } = destination;
 
   const parceDateStart = dayjs(dateFrom);
   const parceDateEnd = dayjs(dateTo);
@@ -37,7 +45,7 @@ const createPointTemplate = (point, offersForType, destinations) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${pointDestination ? pointDestination.name : ''}</h3>
+        <h3 class="event__title">${name}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${dateFrom}">${parceDateStart.format(DATE_FORMAT_TIME)}</time>
@@ -51,7 +59,7 @@ const createPointTemplate = (point, offersForType, destinations) => {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${offersTemplate()}
+          ${createOffersTemplate(offers)}
         </ul>
         <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
           <span class="visually-hidden">Add to favorite</span>
@@ -69,16 +77,16 @@ const createPointTemplate = (point, offersForType, destinations) => {
 export default class PointView extends AbstractView {
 
   #point = null;
-  #offersFoType = null;
+  #offers = null;
   #destinations = null;
   #handleEditClick = null;
   #handleFavoriteClick = null;
 
-  constructor({ point, offersForType, destinations, onEditClick, onFavoriteClick }) {
+  constructor({ point, offersForPoint, destinationsForPoint, onEditClick, onFavoriteClick }) {
     super();
     this.#point = point;
-    this.#offersFoType = offersForType;
-    this.#destinations = destinations;
+    this.#offers = offersForPoint;
+    this.#destinations = destinationsForPoint;
 
     this.#handleEditClick = onEditClick;
     this.#handleFavoriteClick = onFavoriteClick;
@@ -90,7 +98,7 @@ export default class PointView extends AbstractView {
   }
 
   get template() {
-    return createPointTemplate(this.#point, this.#destinations, this.#offersFoType);
+    return createPointTemplate(this.#point, this.#destinations, this.#offers);
   }
 
   #editClickHandler = (evt) => {
