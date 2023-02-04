@@ -1,16 +1,17 @@
 import { remove, render, RenderPosition } from '../framework/render.js';
 import EditPointView from '../view/edit-point-view';
-import { nanoid } from 'nanoid';
 import { UserAction, UpdateType } from '../const.js';
 
 export default class NewPointPresenter {
+  #pointsModel = null;
   #pointListContainer = null;
   #handleDataChange = null;
   #handleDestroy = null;
 
   #pointEditComponent = null;
 
-  constructor({ pointListContainer, onDataChange, onDestroy }) {
+  constructor({ pointsModel, pointListContainer, onDataChange, onDestroy }) {
+    this.#pointsModel = pointsModel;
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
@@ -22,8 +23,11 @@ export default class NewPointPresenter {
     }
 
     this.#pointEditComponent = new EditPointView({
+      offersForType: this.#pointsModel.offers,
+      destinations: this.#pointsModel.destinations,
       onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleDeleteClick
+      onDeleteClick: this.#handleDeleteClick,
+      onFormClose: this.#handleCloseForm,
     });
 
     render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
@@ -44,19 +48,40 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
-  #handleFormSubmit = (task) => {
+  setSaving() {
+    this.#pointEditComponent.updateElement({
+      isSaving: true,
+      isDisabled: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  }
+
+  #handleFormSubmit = (point) => {
     this.#handleDataChange(
       UserAction.ADD_TASK,
       UpdateType.MINOR,
-      // Пока у нас нет сервера, который бы после сохранения
-      // выдывал честный id задачи, нам нужно позаботиться об этом самим
-      { id: nanoid(), ...task },
+      point,
     );
-    this.destroy();
   };
 
   #handleDeleteClick = () => {
     this.destroy();
+  };
+
+  #handleCloseForm = () => {
+    this.destroy();
+    // this.#pointEditComponent.reset(this.#point);
   };
 
   #escKeyDownHandler = (evt) => {
