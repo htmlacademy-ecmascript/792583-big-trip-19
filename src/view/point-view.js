@@ -2,7 +2,6 @@ import AbstractView from '../framework/view/abstract-view.js';
 import dayjs from 'dayjs';
 import { durationDate } from '../utils/date.js';
 import { getOffersByType, getSelectedDestination, getSelectedOffers } from '../utils/point.js';
-// import he from 'he';
 
 const DATE_FORMAT_DATE = 'MMM DD';
 const DATE_FORMAT_TIME = 'HH:mm';

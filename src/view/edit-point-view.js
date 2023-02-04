@@ -1,20 +1,24 @@
 import dayjs from 'dayjs';
-import { TYPE } from '../const.js';
 import AbsrtactStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import he from 'he';
+import { priceValidation } from '../utils/point.js';
 
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
+const DefaultPointData = {
+  DATE_FROM: dayjs().toISOString(),
+  DATE_TO: dayjs().add(30, 'minutes').toISOString(),
+  TYPE: 'taxi'
+};
 const BLANK_POINT = {
-  id: 1,
-  type: TYPE[0],
+  type: DefaultPointData.TYPE,
   offers: [],
-  destination: 1,
-  basePrice: 300,
-  isFavorite: true,
-  dateFrom: '2019-07-10T22:55:56.845Z',
-  dateTo: '2019-07-11T11:22:13.375Z',
+  destination: '',
+  basePrice: '',
+  isFavorite: false,
+  dateFrom: DefaultPointData.DATE_FROM,
+  dateTo: DefaultPointData.DATE_TO,
 };
 
 const createEditPointTemplate = (point, offers, destinations) => {
@@ -23,6 +27,8 @@ const createEditPointTemplate = (point, offers, destinations) => {
   const pointDestination = destinations.find((item) => destination === item.id);
   const parceDateStart = dayjs(dateFrom);
   const parceDateEnd = dayjs(dateTo);
+  const isNewPoint = !point.id;
+  const isDeleteBtnText = isDeleting ? 'Deleting...' : 'Delete';
 
   const pointTypeItemTemplate = () => offers.map((element) =>
     `<div class="event__type-item">
@@ -108,10 +114,10 @@ const createEditPointTemplate = (point, offers, destinations) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}" required>
+        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${point.basePrice ? basePrice : ''}" required>
       </div>
       <button class="event__save-btn  btn  btn--blue" type="submit"${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-      <button class="event__reset-btn" type="reset"${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
+      <button class="event__reset-btn" type="reset"${isDisabled ? 'disabled' : ''}>${isNewPoint ? 'Cancel' : isDeleteBtnText}</button>
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
@@ -139,7 +145,6 @@ export default class EditPointView extends AbsrtactStatefulView {
   constructor({ point = BLANK_POINT, offersForType, destinations, onFormSubmit, onFormClose, onDeleteClick }) {
     super();
     this._setState(EditPointView.parsePointToState(point));
-    // this.#point = point;
     this.#destinations = destinations;
     this.#offersFoType = offersForType;
 
@@ -197,14 +202,12 @@ export default class EditPointView extends AbsrtactStatefulView {
     this.element.querySelector('.event__type-group')
       .addEventListener('change', this.#typeHandler);
     this.element.querySelector('.event__input--price')
-      .addEventListener('input', this.#priceInputHandler);
+      .addEventListener('change', this.#priceInputHandler);
     this.element.querySelector('.event__reset-btn')
       .addEventListener('click', this.#formDeleteClickHandler);
+    this.element.querySelectorAll('.event__offer-selector input')
+      .forEach((offer) => offer.addEventListener('change', this.#offerEventHandler));
 
-    if (this._state.offers.length) {
-      this.element.querySelector('.event__available-offers')
-        .addEventListener('change', this.#offerEventHandler);
-    }
     this.#setDateFromDatepicker();
     this.#setDateToDatepicker();
   }
@@ -249,7 +252,6 @@ export default class EditPointView extends AbsrtactStatefulView {
       return;
     }
     if (this._state.dateFrom >= this._state.dateTo) {
-      submitButton.textContent = 'Change date';
       submitButton.disabled = true;
       return;
     }
@@ -276,9 +278,9 @@ export default class EditPointView extends AbsrtactStatefulView {
 
   #priceInputHandler = (evt) => {
     evt.preventDefault();
-
-    this._setState({
-      basePrice: evt.target.value
+    this.value = priceValidation(evt.target.value);
+    this.updateElement({
+      basePrice: priceValidation(evt.target.value),
     });
   };
 
@@ -322,22 +324,10 @@ export default class EditPointView extends AbsrtactStatefulView {
   static parseStateToPoint(state) {
     const point = { ...state };
 
-    // if (!point.type) {
-    //   point.type = null;
-    // }
-    // if (!point.offers) {
-    //   point.offers = null;
-    // }
-    // if (!point.destination) {
-    //   point.destination = null;
-    // }
-
-    // delete point.type;
-    // delete point.offers;
-    // delete point.destination;
     delete point.isDisabled;
     delete point.isSaving;
     delete point.isDeleting;
+    delete point.pictures;
 
     return point;
   }

@@ -5,6 +5,7 @@ import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import NewEventBtnView from './view/btn-new-event-view.js';
 import PointsApiService from './points-api-service.js';
+import InfoPresenter from './presenter/info-presenter.js';
 
 const AUTHORIZATION = 'Basic ONcw19vl93ADiv19';
 const END_POINT = 'https://19.ecmascript.pages.academy/big-trip';
@@ -29,7 +30,7 @@ const filterPresenter = new FilterPresenter({
   filterModel,
   pointsModel
 });
-
+const infoPresenter = new InfoPresenter(siteMainElement, pointsModel);
 const newPointButtonComponent = new NewEventBtnView({
   onClick: handleNewPointButtonClick
 });
@@ -51,3 +52,4 @@ pointsModel.init()
   .finally(() => {
     render(newPointButtonComponent, siteMainElement);
   });
+infoPresenter.init();

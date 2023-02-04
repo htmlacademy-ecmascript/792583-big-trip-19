@@ -8,7 +8,6 @@ import { sortPoints } from '../utils/point.js';
 import { filter } from '../utils/filter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import LoadingView from '../view/loading-view.js';
-import BoardView from '../view/board-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 const TimeLimit = {
@@ -18,33 +17,28 @@ const TimeLimit = {
 export default class TripPresenter {
   #pointsModel = null;
   #listContainer = null;
-  #filtersContainer = null;
   #filterModel = null;
   #newPointPresenter = null;
   #loadingComponent = new LoadingView();
   #isLoading = true;
   #pointListComponent = new TripListView();
-  #boardComponent = new BoardView();
   #noPointsComponent = null;
-  #filteredPoints = [];
   #pointPresenter = new Map();
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
-  #soursedFilterPoints = [];
-  #filterComponent = null;
   #sortComponent = null;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor({ listContainer, filtersContainer, pointsModel, filterModel, onNewPointDestroy }) {
+  constructor({ listContainer, pointsModel, filterModel, onNewPointDestroy }) {
     this.#listContainer = listContainer;
-    this.#filtersContainer = filtersContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
 
     this.#newPointPresenter = new NewPointPresenter({
+      pointsModel,
       pointListContainer: this.#pointListComponent.element,
       onDataChange: this.#handleViewAction,
       onDestroy: onNewPointDestroy,
@@ -74,10 +68,6 @@ export default class TripPresenter {
     return filteredPoints;
   }
 
-  init() {
-    this.#renderBoard();
-  }
-
   createPoint() {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
@@ -98,10 +88,6 @@ export default class TripPresenter {
     this.#pointPresenter.set(point.id, pointPresenter);
   }
 
-  #renderPoints(points) {
-    points.forEach((point) => this.#renderPoint(point));
-  }
-
   #handleModeChange = () => {
     this.#newPointPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
@@ -111,12 +97,7 @@ export default class TripPresenter {
     this.#noPointsComponent = new ListEmptyView({
       filterType: this.#filterType,
     });
-    render(this.#noPointsComponent, this.#boardComponent.element, RenderPosition.AFTERBEGIN);
-  }
-
-  #clearPointList() {
-    this.#pointPresenter.forEach((presenter) => presenter.destroy());
-    this.#pointPresenter.clear();
+    render(this.#noPointsComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 
   #handleViewAction = async (actionType, updateType, update) => {
@@ -140,7 +121,7 @@ export default class TripPresenter {
         }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointPresenter.get(update.id).setDeliting();
+        this.#pointPresenter.get(update.id).setDeleting();
         try {
           await this.#pointsModel.deletePoint(updateType, update);
         } catch (err) {
@@ -152,19 +133,15 @@ export default class TripPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    // console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this.#pointPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
         this.#clearBoard();
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        // - обновить всю доску (например, при переключении фильтра)
         this.#clearBoard({ resetRenderedTaskCount: true, resetSortType: true });
         this.#renderBoard();
         break;
@@ -196,7 +173,7 @@ export default class TripPresenter {
   }
 
   #renderLoading() {
-    render(this.#loadingComponent, this.#boardComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#loadingComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 
   #clearBoard({ resetSortType = false } = {}) {
@@ -213,6 +190,10 @@ export default class TripPresenter {
   }
 
   #renderBoard() {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     render(this.#pointListComponent, this.#listContainer);
     const points = this.points;
     const pointsCount = points.length;
@@ -220,15 +201,15 @@ export default class TripPresenter {
       this.#renderNoPoints();
       return;
     }
-    if (this.#isLoading) {
-      this.#renderLoading();
-      return;
-    }
     this.#renderSort();
     for (let i = 0; i < points.length; i++) {
 
       this.#renderPoint(points[i], this.destinations, this.offers,);
     }
-    // this.#clearBoard();
   }
+
+  init() {
+    this.#renderBoard();
+  }
+
 }

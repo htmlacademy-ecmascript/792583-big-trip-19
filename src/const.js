@@ -28,5 +28,6 @@ const UpdateType = {
   INIT: 'INIT',
 };
 
+const PRICE_PATTERN = /[\D]+/g;
 
-export { TYPE, FilterType, SortType, UserAction, UpdateType };
+export { TYPE, FilterType, SortType, UserAction, UpdateType, PRICE_PATTERN };

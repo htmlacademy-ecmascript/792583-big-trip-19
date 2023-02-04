@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { SortType } from '../const.js';
+import { PRICE_PATTERN } from '../const.js';
 
 const DATE_FORMAT = 'MMM DD';
 
@@ -22,8 +23,7 @@ const getSelectedDestination = (destinations, destinationId) => destinations.fin
 const getSelectedOffers = (offers, offersIds) => offers.filter((item) => offersIds.some((offerId) => offerId === item.id));
 
 const isOfferIsSelected = (offerId, selectedOffersIds) => selectedOffersIds.includes(offerId);
-// Функция помещает задачи без даты в конце списка,
-// возвращая нужный вес для колбэка sort
+
 function getWeightForNullDate(dateA, dateB) {
   if (dateA === null && dateB === null) {
     return 0;
@@ -66,6 +66,17 @@ const sort = {
   [SortType.OFFERS]: (points) => points,
 };
 
+const priceValidation = (value) => {
+
+  let currentValue = value.replace(PRICE_PATTERN, '');
+
+  if (currentValue < 0) {
+    currentValue = Math.abs(currentValue);
+  }
+  currentValue = +currentValue;
+  return currentValue;
+};
+
 export {
   humanizeTaskDueDate,
   isTaskExpired,
@@ -77,4 +88,5 @@ export {
   getSelectedDestination,
   getSelectedOffers,
   isOfferIsSelected,
+  priceValidation,
 };
