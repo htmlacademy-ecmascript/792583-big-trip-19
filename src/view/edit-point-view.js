@@ -132,7 +132,6 @@ const createEditPointTemplate = (point, offers, destinations) => {
 
 export default class EditPointView extends AbsrtactStatefulView {
 
-  #point = null;
   #destinations = null;
   #offersFoType = null;
   #handleFormSubmit = null;
