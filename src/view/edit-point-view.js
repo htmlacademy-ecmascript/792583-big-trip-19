@@ -7,18 +7,19 @@ import { priceValidation } from '../utils/point.js';
 
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
 const DefaultPointData = {
-  DATE_FROM: dayjs().toISOString(),
-  DATE_TO: dayjs().add(30, 'minutes').toISOString(),
+  DATE_FROM: new Date(dayjs().toISOString()),
+  DATE_TO: new Date(dayjs().add(1, 'hours').toISOString()),
   TYPE: 'taxi'
 };
 const BLANK_POINT = {
+  id: null,
   type: DefaultPointData.TYPE,
+  dateFrom: DefaultPointData.DATE_FROM,
+  dateTo: DefaultPointData.DATE_TO,
   offers: [],
   destination: '',
   basePrice: '',
   isFavorite: false,
-  dateFrom: DefaultPointData.DATE_FROM,
-  dateTo: DefaultPointData.DATE_TO,
 };
 
 const createEditPointTemplate = (point, offers, destinations) => {
@@ -132,7 +133,6 @@ const createEditPointTemplate = (point, offers, destinations) => {
 
 export default class EditPointView extends AbsrtactStatefulView {
 
-  #point = null;
   #destinations = null;
   #offersFoType = null;
   #handleFormSubmit = null;
@@ -238,21 +238,11 @@ export default class EditPointView extends AbsrtactStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    const destinationInput = this.element.querySelector('.event__input--destination');
     const submitButton = this.element.querySelector('.event__save-btn');
-    const priceInput = this.element.querySelector('.event__input--price');
 
-    if (priceInput.value < 1) {
-      submitButton.disabled = true;
-      return;
-    }
-
-    if (destinationInput.value === '') {
-      submitButton.disabled = true;
-      return;
-    }
     if (this._state.dateFrom >= this._state.dateTo) {
       submitButton.disabled = true;
+      submitButton.textContent = 'Change date';
       return;
     }
     this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));

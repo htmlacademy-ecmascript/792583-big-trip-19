@@ -69,7 +69,7 @@ export default class NewPointPresenter {
 
   #handleFormSubmit = (point) => {
     this.#handleDataChange(
-      UserAction.ADD_TASK,
+      UserAction.ADD_POINT,
       UpdateType.MINOR,
       point,
     );
@@ -81,7 +81,6 @@ export default class NewPointPresenter {
 
   #handleCloseForm = () => {
     this.destroy();
-    // this.#pointEditComponent.reset(this.#point);
   };
 
   #escKeyDownHandler = (evt) => {

@@ -9,6 +9,7 @@ import { filter } from '../utils/filter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import LoadingView from '../view/loading-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import ErrorView from '../view/error-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -21,6 +22,7 @@ export default class TripPresenter {
   #newPointPresenter = null;
   #loadingComponent = new LoadingView();
   #isLoading = true;
+  #errorComponent = new ErrorView();
   #pointListComponent = new TripListView();
   #noPointsComponent = null;
   #pointPresenter = new Map();
@@ -142,7 +144,7 @@ export default class TripPresenter {
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard({ resetRenderedTaskCount: true, resetSortType: true });
+        this.#clearBoard({ resetSortType: true });
         this.#renderBoard();
         break;
       case UpdateType.INIT:
@@ -172,6 +174,10 @@ export default class TripPresenter {
     render(this.#sortComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 
+  #renderError = () => {
+    render(this.#errorComponent, this.#listContainer);
+  };
+
   #renderLoading() {
     render(this.#loadingComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   }
@@ -199,6 +205,12 @@ export default class TripPresenter {
     const pointsCount = points.length;
     if (!pointsCount) {
       this.#renderNoPoints();
+      return;
+    }
+    if (!points.length
+      && !this.#pointsModel.offers.length
+      && !this.#pointsModel.destinations.length) {
+      this.#renderError();
       return;
     }
     this.#renderSort();
