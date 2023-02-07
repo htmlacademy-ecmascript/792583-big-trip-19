@@ -2,14 +2,12 @@ import { render, replace, remove } from '../framework/render.js';
 import { filter } from '../utils/filter.js';
 import { FilterType, UpdateType } from '../const.js';
 import ListFilterView from '../view/list-filter-view.js';
-
 export default class FilterPresenter {
   #filterContainer = null;
   #filterModel = null;
   #pointsModel = null;
 
   #filterComponent = null;
-
   constructor({ filterContainer, filterModel, pointsModel }) {
     this.#filterContainer = filterContainer;
     this.#filterModel = filterModel;
@@ -73,6 +71,7 @@ export default class FilterPresenter {
     if (this.#filterModel.filter === filterType) {
       return;
     }
+
     this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
   };
 }

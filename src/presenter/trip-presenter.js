@@ -15,6 +15,7 @@ const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
 };
+
 export default class TripPresenter {
   #pointsModel = null;
   #listContainer = null;
@@ -174,9 +175,9 @@ export default class TripPresenter {
     render(this.#sortComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 
-  #renderError = () => {
-    render(this.#errorComponent, this.#listContainer);
-  };
+  #renderError() {
+    render(this.#errorComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+  }
 
   #renderLoading() {
     render(this.#loadingComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
