@@ -2,6 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 import dayjs from 'dayjs';
 import { durationDate } from '../utils/date.js';
 import { getOffersByType, getSelectedDestination, getSelectedOffers } from '../utils/point.js';
+import he from 'he';
 
 const DATE_FORMAT_DATE = 'MMM DD';
 const DATE_FORMAT_TIME = 'HH:mm';
@@ -14,9 +15,9 @@ const createOffersTemplate = (offersTemplate) => {
     .map(
       (offer) =>
         `<li class="event__offer">
-          <span class="event__offer-title">${offer.title}</span>
+          <span class="event__offer-title">${he.encode(offer.title)}</span>
           +€&nbsp;
-          <span class="event__offer-price">${offer.price}</span>
+          <span class="event__offer-price">${he.encode(String(offer.price))}</span>
         </li>`
     ).join('');
 };
@@ -42,9 +43,9 @@ const createPointTemplate = (point, destinations, offers) => {
       <div class="event">
         <time class="event__date" datetime="${dateFrom}">${parceDateStart.format(DATE_FORMAT_DATE)}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${he.encode(type)}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${name}</h3>
+        <h3 class="event__title">${he.encode(name)}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${dateFrom}">${parceDateStart.format(DATE_FORMAT_TIME)}</time>
@@ -54,7 +55,7 @@ const createPointTemplate = (point, destinations, offers) => {
           <p class="event__duration">${durationDate(dateFrom, dateTo)}</p>
         </div>
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
+          &euro;&nbsp;<span class="event__price-value">${he.encode(String(basePrice))}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
@@ -74,7 +75,6 @@ const createPointTemplate = (point, destinations, offers) => {
 };
 
 export default class PointView extends AbstractView {
-
   #point = null;
   #offers = null;
   #destinations = null;

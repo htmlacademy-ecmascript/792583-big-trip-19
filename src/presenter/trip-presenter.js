@@ -15,6 +15,7 @@ const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
 };
+
 export default class TripPresenter {
   #pointsModel = null;
   #listContainer = null;
@@ -52,6 +53,7 @@ export default class TripPresenter {
 
   get points() {
     this.#filterType = this.#filterModel.filter;
+
     const points = this.#pointsModel.points;
     const filteredPoints = filter[this.#filterType](points);
 
@@ -99,6 +101,7 @@ export default class TripPresenter {
     this.#noPointsComponent = new ListEmptyView({
       filterType: this.#filterType,
     });
+
     render(this.#noPointsComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 
@@ -174,9 +177,9 @@ export default class TripPresenter {
     render(this.#sortComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 
-  #renderError = () => {
-    render(this.#errorComponent, this.#listContainer);
-  };
+  #renderError() {
+    render(this.#errorComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+  }
 
   #renderLoading() {
     render(this.#loadingComponent, this.#listContainer, RenderPosition.AFTERBEGIN);

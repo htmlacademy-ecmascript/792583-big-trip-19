@@ -6,6 +6,7 @@ import he from 'he';
 import { priceValidation } from '../utils/point.js';
 
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
+
 const DefaultPointData = {
   DATE_FROM: new Date(dayjs().toISOString()),
   DATE_TO: new Date(dayjs().add(1, 'hours').toISOString()),
@@ -33,11 +34,11 @@ const createEditPointTemplate = (point, offers, destinations) => {
 
   const pointTypeItemTemplate = () => offers.map((element) =>
     `<div class="event__type-item">
-    <input id="event-type-${element.type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.type}"${element.type === type ? 'checked' : ''}>
+    <input id="event-type-${he.encode(element.type)}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${he.encode(element.type)}"${element.type === type ? 'checked' : ''}>
     <label class="event__type-label  event__type-label--${element.type}" for="event-type-${element.type}-1">${element.type.charAt(0).toUpperCase() + element.type.slice(1)}</label>
   </div>`).join('');
 
-  const destinationTemplate = () => destinations.map((element) => `<option value="${element.name}"></option>`).join('');
+  const destinationTemplate = () => destinations.map((element) => `<option value="${he.encode(element.name)}"></option>`).join('');
 
   const createOffersSectionTemplate = () => {
     if (!pointTypeOffer.offers.length) {
@@ -50,11 +51,11 @@ const createEditPointTemplate = (point, offers, destinations) => {
       <div class="event__available-offers">
       ${pointTypeOffer.offers.map((offer) => `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="${offer.title}" data-offer-id="${offer.id}" ${selectedOffersId.includes(offer.id) ? 'checked' : ''}>
-            <label class="event__offer-label" for="event-offer-${offer.title}-${offer.id}">
-              <span class="event__offer-title">${offer.title}</span>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${he.encode(offer.title)}-${he.encode(String(offer.id))}" type="checkbox" name="${he.encode(offer.title)}" data-offer-id="${he.encode(String(offer.id))}" ${selectedOffersId.includes(offer.id) ? 'checked' : ''}>
+            <label class="event__offer-label" for="event-offer-${he.encode(offer.title)}-${offer.id}">
+              <span class="event__offer-title">${he.encode(offer.title)}</span>
               &plus;&euro;&nbsp;
-              <span class="event__offer-price">${offer.price}</span>
+              <span class="event__offer-price">${he.encode(String(offer.price))}</span>
             </label>
           </div>`).join('')}
       </div>
@@ -69,10 +70,10 @@ const createEditPointTemplate = (point, offers, destinations) => {
     return `
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${pointDestination.description}</p>
+      <p class="event__destination-description">${he.encode(pointDestination.description)}</p>
       <div class="event__photos-container">
         <div class="event__photos-tape">
-          ${pointDestination.pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}"></img>`).join('')}
+          ${pointDestination.pictures.map((picture) => `<img class="event__photo" src="${he.encode(picture.src)}" alt="${he.encode(picture.description)}"></img>`).join('')}
         </div>
       </div>
     </section>`;
@@ -84,7 +85,7 @@ const createEditPointTemplate = (point, offers, destinations) => {
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${he.encode(type)}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
         <div class="event__type-list">
@@ -96,7 +97,7 @@ const createEditPointTemplate = (point, offers, destinations) => {
       </div>
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-          ${type}
+          ${he.encode(type)}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination ? he.encode(pointDestination.name) : ''}" list="destination-list-1" placeholder="Select a city from the list" required>
         <datalist id="destination-list-1">
@@ -115,7 +116,7 @@ const createEditPointTemplate = (point, offers, destinations) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${point.basePrice ? basePrice : ''}" required>
+        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${point.basePrice ? he.encode(String(basePrice)) : '1'}" required>
       </div>
       <button class="event__save-btn  btn  btn--blue" type="submit"${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
       <button class="event__reset-btn" type="reset"${isDisabled ? 'disabled' : ''}>${isNewPoint ? 'Cancel' : isDeleteBtnText}</button>
@@ -132,7 +133,6 @@ const createEditPointTemplate = (point, offers, destinations) => {
 };
 
 export default class EditPointView extends AbsrtactStatefulView {
-
   #destinations = null;
   #offersFoType = null;
   #handleFormSubmit = null;
@@ -177,20 +177,6 @@ export default class EditPointView extends AbsrtactStatefulView {
       this.#datepickerTo = null;
     }
   }
-
-  #dateFromChangeHandler = ([dateFrom]) => {
-    this.updateElement({
-      dateFrom,
-    });
-    this.#setDateToDatepicker();
-  };
-
-  #dateToChangeHandler = ([dateTo]) => {
-    this.updateElement({
-      dateTo,
-    });
-    this.#setDateFromDatepicker();
-  };
 
   _restoreHandlers() {
     this.element.querySelector('.event--edit')
@@ -264,6 +250,20 @@ export default class EditPointView extends AbsrtactStatefulView {
       type: evt.target.value,
       offers: [],
     });
+  };
+
+  #dateFromChangeHandler = ([dateFrom]) => {
+    this.updateElement({
+      dateFrom,
+    });
+    this.#setDateToDatepicker();
+  };
+
+  #dateToChangeHandler = ([dateTo]) => {
+    this.updateElement({
+      dateTo,
+    });
+    this.#setDateFromDatepicker();
   };
 
   #priceInputHandler = (evt) => {
