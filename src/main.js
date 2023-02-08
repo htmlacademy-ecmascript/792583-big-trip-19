@@ -16,6 +16,7 @@ const siteMainElement = document.querySelector('.trip-main');
 const pointsModel = new PointsModel({
   pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
 });
+
 const filterModel = new FilterModel();
 
 const tripPresenter = new TripPresenter({
@@ -30,7 +31,9 @@ const filterPresenter = new FilterPresenter({
   filterModel,
   pointsModel
 });
+
 const infoPresenter = new InfoPresenter(siteMainElement, pointsModel);
+
 const newPointButtonComponent = new NewEventBtnView({
   onClick: handleNewPointButtonClick
 });
@@ -43,8 +46,6 @@ function handleNewPointButtonClick() {
   tripPresenter.createPoint();
   newPointButtonComponent.element.disabled = true;
 }
-
-// render(newPointButtonComponent, siteMainElement);
 
 filterPresenter.init();
 tripPresenter.init();

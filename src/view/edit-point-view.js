@@ -6,6 +6,7 @@ import he from 'he';
 import { priceValidation } from '../utils/point.js';
 
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
+
 const DefaultPointData = {
   DATE_FROM: new Date(dayjs().toISOString()),
   DATE_TO: new Date(dayjs().add(1, 'hours').toISOString()),
@@ -132,7 +133,6 @@ const createEditPointTemplate = (point, offers, destinations) => {
 };
 
 export default class EditPointView extends AbsrtactStatefulView {
-
   #destinations = null;
   #offersFoType = null;
   #handleFormSubmit = null;
@@ -177,20 +177,6 @@ export default class EditPointView extends AbsrtactStatefulView {
       this.#datepickerTo = null;
     }
   }
-
-  #dateFromChangeHandler = ([dateFrom]) => {
-    this.updateElement({
-      dateFrom,
-    });
-    this.#setDateToDatepicker();
-  };
-
-  #dateToChangeHandler = ([dateTo]) => {
-    this.updateElement({
-      dateTo,
-    });
-    this.#setDateFromDatepicker();
-  };
 
   _restoreHandlers() {
     this.element.querySelector('.event--edit')
@@ -264,6 +250,20 @@ export default class EditPointView extends AbsrtactStatefulView {
       type: evt.target.value,
       offers: [],
     });
+  };
+
+  #dateFromChangeHandler = ([dateFrom]) => {
+    this.updateElement({
+      dateFrom,
+    });
+    this.#setDateToDatepicker();
+  };
+
+  #dateToChangeHandler = ([dateTo]) => {
+    this.updateElement({
+      dateTo,
+    });
+    this.#setDateFromDatepicker();
   };
 
   #priceInputHandler = (evt) => {

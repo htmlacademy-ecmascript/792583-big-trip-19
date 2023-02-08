@@ -53,6 +53,7 @@ export default class TripPresenter {
 
   get points() {
     this.#filterType = this.#filterModel.filter;
+
     const points = this.#pointsModel.points;
     const filteredPoints = filter[this.#filterType](points);
 
@@ -100,6 +101,7 @@ export default class TripPresenter {
     this.#noPointsComponent = new ListEmptyView({
       filterType: this.#filterType,
     });
+
     render(this.#noPointsComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 

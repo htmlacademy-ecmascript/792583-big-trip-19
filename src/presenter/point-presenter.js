@@ -7,6 +7,7 @@ const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
 };
+
 export default class PointPresenter {
   #pointListContainer = null;
   #pointComponent = null;
@@ -22,7 +23,6 @@ export default class PointPresenter {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
-
     this.#offers = offers;
     this.#destinations = destinations;
   }
@@ -53,9 +53,11 @@ export default class PointPresenter {
       render(this.#pointComponent, this.#pointListContainer);
       return;
     }
+
     if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
+
     if (this.#mode === Mode.EDITING) {
       replace(this.#pointEditComponent, prevPointEditComponent);
     }

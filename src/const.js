@@ -1,4 +1,4 @@
-const TYPE = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
+const PRICE_PATTERN = /[\D]+/g;
 
 const FilterType = {
   EVERYTHING: 'everything',
@@ -28,6 +28,4 @@ const UpdateType = {
   INIT: 'INIT',
 };
 
-const PRICE_PATTERN = /[\D]+/g;
-
-export { TYPE, FilterType, SortType, UserAction, UpdateType, PRICE_PATTERN };
+export { FilterType, SortType, UserAction, UpdateType, PRICE_PATTERN };
