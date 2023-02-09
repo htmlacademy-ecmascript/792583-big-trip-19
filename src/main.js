@@ -3,7 +3,7 @@ import { render } from './framework/render.js';
 import PointsModel from './model/points-model.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
-import NewEventBtnView from './view/btn-new-event-view.js';
+import NewEventBtnView from './view/new-event-btn-view.js';
 import PointsApiService from './points-api-service.js';
 import InfoPresenter from './presenter/info-presenter.js';
 
