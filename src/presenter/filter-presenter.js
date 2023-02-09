@@ -63,6 +63,14 @@ export default class FilterPresenter {
     remove(prevFilterComponent);
   }
 
+  #handleClearFilterMessage() {
+    const eventsContainer = document.querySelector('.trip-events');
+    const eventsMessage = document.querySelector('.trip-events__msg');
+    if (eventsContainer.children[0] === eventsMessage && eventsContainer.children[2]) {
+      eventsContainer.removeChild(eventsMessage);
+    }
+  }
+
   #handleModelEvent = () => {
     this.init();
   };
@@ -71,7 +79,7 @@ export default class FilterPresenter {
     if (this.#filterModel.filter === filterType) {
       return;
     }
-
+    this.#handleClearFilterMessage();
     this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
   };
 }
